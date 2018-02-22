@@ -1,0 +1,75 @@
+<resources>
+    <string name="app_name">Student scheduler</string>
+
+    <!-- Event name for terms  -->
+    <string name="event_terms">Terms</string>
+
+    <!-- Event name for courses  -->
+    <string name="event_courses">Courses</string>
+
+    <!-- Event name for assessments  -->
+    <string name="event_assessments">Assessments</string>
+
+    <!-- Hint for title in editor activity -->
+    <string name="title_hint">Title</string>
+
+    <!-- Hint for start time in editor activity -->
+    <string name="start_time_hint">Start time</string>
+
+    <!-- Hint for end time in editor activity -->
+    <string name="end_time_hint">End time</string>
+
+    <!-- Label for overflow menu option that deletes all pet data in the app [CHAR LIMIT=20] -->
+    <string name="action_menu_delete_all_assessments">Delete all assessments</string>
+
+    <!-- Title for the activity to add a new pet [CHAR LIMIT=20] -->
+    <string name="title_activity_editor_new_assessment">Add a assessment</string>
+
+    <!-- Label for editor menu option to save pet and leave editor [CHAR LIMIT=20] -->
+    <string name="action_menu_save">Save</string>
+
+    <!-- Label for editor overflow menu option that deletes the current pet [CHAR LIMIT=20] -->
+    <string name="action_menu_delete">Delete</string>
+
+    <!-- Toast message in editor when new pet has been successfully inserted [CHAR LIMIT=NONE] -->
+    <string name="msg_insert_assessment_successful">Assessment inserted</string>
+
+    <string name="msg_update_assessment_successful">Assessment updated</string>
+
+    <!-- Toast message in editor when new pet has failed to be inserted [CHAR LIMIT=NONE] -->
+    <string name="error_insert_assessment_failed">Error with inserting assessment</string>
+
+    <string name="error_update_assessment_failed">Error with updating assessment</string>
+
+    <!-- Title text for the empty view, which describes the empty dog house image [CHAR LIMIT=50] -->
+    <string name="empty_view_title_text">It\'s a bit lonely here...</string>
+
+    <!-- Subtitle text for the empty view that prompts the user to add a pet [CHAR LIMIT=50] -->
+    <string name="empty_view_subtitle_text_assessment">Get started by adding a assessment</string>
+
+    <string name="title_activity_editor_edit_assessment">Edit assessment</string>
+
+    <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
+    <string name="msg_unsaved_changes_dialog">Discard your changes and quit editing?</string>
+
+    <!-- Dialog button text for the option to discard a user's changes [CHAR LIMIT=20] -->
+    <string name="action_discard">Discard</string>
+
+    <!-- Dialog button text for the option to keep editing the current pet [CHAR LIMIT=20] -->
+    <string name="action_keep_editing">Keep Editing</string>
+
+    <!-- Toast message in editor when current pet was successfully deleted [CHAR LIMIT=NONE] -->
+    <string name="msg_delete_assessment_successful">Assessment deleted</string>
+
+    <!-- Toast message in editor when current pet has failed to be deleted [CHAR LIMIT=NONE] -->
+    <string name="error_delete_assessment_failed">Error with deleting assessment</string>
+
+    <!-- Dialog message to ask the user to confirm deleting the current pet [CHAR LIMIT=NONE] -->
+    <string name="msg_delete_dialog">Delete this assessment?</string>
+
+    <!-- Dialog button text for the option to confirm deleting the current pet [CHAR LIMIT=20] -->
+    <string name="action_dialog_delete">Delete</string>
+
+    <!-- Dialog button text for the option to cancel deletion of the current pet [CHAR LIMIT=20] -->
+    <string name="action_dialog_cancel">Cancel</string>
+</resources>

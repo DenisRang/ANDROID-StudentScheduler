@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Layout for the editor -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".EditorAssessmentActivity">
+
+    <!-- Title field -->
+    <EditText
+        android:id="@+id/edit_assessment_title"
+        android:hint="@string/title_hint"
+        android:inputType="textCapWords"
+        style="@style/EditorFieldStyle" />
+
+    <!-- Start time field -->
+    <EditText
+        android:id="@+id/edit_assessment_start_time"
+        android:hint="@string/start_time_hint"
+        android:inputType="textCapWords"
+        style="@style/EditorFieldStyle" />
+
+    <!-- End time field -->
+    <EditText
+        android:id="@+id/edit_assessment_end_time"
+        android:hint="@string/end_time_hint"
+        android:inputType="textCapWords"
+        style="@style/EditorFieldStyle" />
+</LinearLayout>
