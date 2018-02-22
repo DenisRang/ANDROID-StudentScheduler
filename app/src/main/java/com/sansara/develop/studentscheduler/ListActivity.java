@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
 public class ListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int ASSESSMENT_LOADER = 0;
     private AssessmentCursorAdapter mAssessmentCursorAdapter;
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +66,18 @@ public class ListActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mAssessmentCursorAdapter.getCount() == 0) hideOption(R.id.item_delete_all_entries);
+        return true;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/activity_list.xml file.
         // This adds menu items to the app bar.
         getMenuInflater().inflate(R.menu.activity_list, menu);
+        mMenu = menu;
         return true;
     }
 
@@ -101,6 +111,7 @@ public class ListActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader loader, Cursor data) {
         mAssessmentCursorAdapter.swapCursor(data);
+        if (mAssessmentCursorAdapter.getCount() > 0) showOption(R.id.item_delete_all_entries);
     }
 
     @Override
@@ -110,7 +121,7 @@ public class ListActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private void showDeleteConfirmationDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.msg_delete_dialog);
+        builder.setMessage(R.string.msg_delete_all);
         builder.setNegativeButton(R.string.action_dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -134,7 +145,22 @@ public class ListActivity extends AppCompatActivity implements LoaderManager.Loa
         if (rowAffected == 0) {
             Toast.makeText(this, R.string.error_delete_assessment_failed, Toast.LENGTH_SHORT).show();
         } else {
+            hideOption(R.id.item_delete_all_entries);
             Toast.makeText(this, R.string.msg_delete_assessment_successful, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void hideOption(int id) {
+        if (mMenu != null) {
+            MenuItem item = mMenu.findItem(id);
+            item.setVisible(false);
+        }
+    }
+
+    private void showOption(int id) {
+        if (mMenu != null) {
+            MenuItem item = mMenu.findItem(id);
+            item.setVisible(true);
         }
     }
 }

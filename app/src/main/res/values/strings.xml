@@ -19,9 +19,6 @@
     <!-- Hint for end time in editor activity -->
     <string name="end_time_hint">End time</string>
 
-    <!-- Label for overflow menu option that deletes all pet data in the app [CHAR LIMIT=20] -->
-    <string name="action_menu_delete_all_assessments">Delete all assessments</string>
-
     <!-- Title for the activity to add a new pet [CHAR LIMIT=20] -->
     <string name="title_activity_editor_new_assessment">Add a assessment</string>
 
@@ -30,6 +27,8 @@
 
     <!-- Label for editor overflow menu option that deletes the current pet [CHAR LIMIT=20] -->
     <string name="action_menu_delete">Delete</string>
+
+    <string name="action_menu_redo">Change</string>
 
     <!-- Toast message in editor when new pet has been successfully inserted [CHAR LIMIT=NONE] -->
     <string name="msg_insert_assessment_successful">Assessment inserted</string>
@@ -45,7 +44,7 @@
     <string name="empty_view_title_text">It\'s a bit lonely here...</string>
 
     <!-- Subtitle text for the empty view that prompts the user to add a pet [CHAR LIMIT=50] -->
-    <string name="empty_view_subtitle_text_assessment">Get started by adding a assessment</string>
+    <string name="empty_view_subtitle_text_assessment">Get started by adding an assessment</string>
 
     <string name="title_activity_editor_edit_assessment">Edit assessment</string>
 
@@ -66,6 +65,8 @@
 
     <!-- Dialog message to ask the user to confirm deleting the current pet [CHAR LIMIT=NONE] -->
     <string name="msg_delete_dialog">Delete this assessment?</string>
+
+    <string name="msg_delete_all">Delete all items?</string>
 
     <!-- Dialog button text for the option to confirm deleting the current pet [CHAR LIMIT=20] -->
     <string name="action_dialog_delete">Delete</string>

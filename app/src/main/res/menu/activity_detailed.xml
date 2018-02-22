@@ -5,9 +5,15 @@
     tools:context=".EditorAssessmentActivity">
 
     <item
-        android:id="@+id/item_action_save"
-        android:icon="@mipmap/ic_done"
-        android:title="@string/action_menu_save"
+        android:id="@+id/item_action_redo"
+        android:icon="@mipmap/ic_redo_white_24dp"
+        android:title="@string/action_menu_redo"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/item_action_delete"
+        android:icon="@mipmap/ic_delete_white_24dp"
+        android:title="@string/action_menu_delete"
         app:showAsAction="ifRoom" />
 
 </menu>

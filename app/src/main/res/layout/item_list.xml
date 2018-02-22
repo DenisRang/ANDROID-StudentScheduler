@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/text_item_list_title"
-            style="@style/MiwokLang"
+            style="@style/ListActivityItemStyle"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_centerVertical="true"

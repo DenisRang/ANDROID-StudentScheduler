@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditorAssessmentActivity">
+    android:background="@color/fon">
 
     <ListView
         android:id="@+id/list_activity_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </ListView>
+
     <!-- Empty view for the list -->
     <RelativeLayout
         android:id="@+id/relative_layout_empty_view"
@@ -55,5 +55,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
-        android:src="@mipmap/ic_done" />
+        android:src="@mipmap/ic_create_white_36dp" />
 </RelativeLayout>

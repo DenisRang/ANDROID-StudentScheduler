@@ -81,16 +81,6 @@ public class EditorAssessmentActivity extends AppCompatActivity implements
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (mCurrentAssessmentUri == null) {
-            MenuItem menuItem = menu.findItem(R.id.item_action_delete);
-            menuItem.setVisible(false);
-        }
-        return true;
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_editor, menu);
         return true;
