@@ -1,59 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Layout for the list of pets -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear_layout_fragment_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fon">
+    android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/list_activity_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
-
-    <!-- Empty view for the list -->
-    <RelativeLayout
-        android:id="@+id/relative_layout_empty_view"
+    <fragment
+        android:id="@+id/fragment_list"
+        android:name="com.sansara.develop.studentscheduler.AssessmentsFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
-
-        <ImageView
-            android:id="@+id/image_empty_list_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/ic_empty_view" />
-
-        <TextView
-            android:id="@+id/text_empty_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/image_empty_list_image"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="16dp"
-            android:text="@string/empty_view_title_text"
-            android:textAppearance="?android:textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/text_empty_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text_empty_title"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="8dp"
-            android:text="@string/empty_view_subtitle_text_assessment"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="#A2AAB0" />
-    </RelativeLayout>
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/button_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
-        android:src="@mipmap/ic_create_white_36dp" />
-</RelativeLayout>
+        tools:layout="@layout/fragment_list"/>
+</LinearLayout>
