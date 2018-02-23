@@ -23,10 +23,7 @@ import android.widget.Toast;
 import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
 
 
-public class EditorAssessmentActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor> {
-
-    private static final int EXISTING_ASSESSMENT_LOADER = 0;
+public class EditorAssessmentActivity extends AppCompatActivity {
 
     private Uri mCurrentAssessmentUri;
 
@@ -62,8 +59,6 @@ public class EditorAssessmentActivity extends AppCompatActivity implements
             invalidateOptionsMenu();
         } else {
             setTitle(getString(R.string.title_activity_editor_edit_assessment));
-
-            getLoaderManager().initLoader(EXISTING_ASSESSMENT_LOADER, null, this);
         }
 
         // Find all relevant views that we will need to read user input from
@@ -78,6 +73,18 @@ public class EditorAssessmentActivity extends AppCompatActivity implements
         mEditTextStart.setOnTouchListener(mTouchListener);
         mEditTextEnd.setOnTouchListener(mTouchListener);
 
+        Bundle bundle = intent.getBundleExtra(DetailedAssessmentActivity.EXTRA_EXISTING_ASSESSMENT_BUNDLE);
+        if (bundle != null && !bundle.isEmpty()) {
+            // Extract out the value from the Bundle for the given column index
+            String title = bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_TITLE);
+            String start = bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_START);
+            String end = bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_END);
+
+            // Update the views on the screen with the values from the database
+            if (title != null && !TextUtils.isEmpty(title)) mEditTextTitle.setText(title);
+            if (title != null && !TextUtils.isEmpty(start)) mEditTextStart.setText(start);
+            if (title != null && !TextUtils.isEmpty(end)) mEditTextEnd.setText(end);
+        }
     }
 
     @Override
@@ -95,10 +102,6 @@ public class EditorAssessmentActivity extends AppCompatActivity implements
                 saveAssessment();
                 // Exit activity
                 finish();
-                return true;
-            // Respond to a click on the "Delete" menu option
-            case R.id.item_action_delete:
-                showDeleteConfirmationDialog();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
@@ -149,96 +152,6 @@ public class EditorAssessmentActivity extends AppCompatActivity implements
 
         // Show dialog that there are unsaved changes
         showUnsavedChangesDialog(discardButtonClickListener);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        String[] projection = {
-                AssessmentEntry._ID,
-                AssessmentEntry.COLUMN_TITLE,
-                AssessmentEntry.COLUMN_START_TIME,
-                AssessmentEntry.COLUMN_END_TIME,
-                AssessmentEntry.COLUMN_COURSE_ID};
-
-        // This loader will execute the ContentProvider's query method on a background thread
-        return new CursorLoader(this,
-                mCurrentAssessmentUri,
-                projection,
-                null,
-                null,
-                null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        // Bail early if the cursor is null or there is less than 1 row in the cursor
-        if (cursor == null || cursor.getCount() < 1) {
-            return;
-        }
-
-        // Proceed with moving to the first row of the cursor and reading data from it
-        // (This should be the only row in the cursor)
-        if (cursor.moveToFirst()) {
-            // Find the columns of attributes that we're interested in
-            int ColumnIndexTitle = cursor.getColumnIndex(AssessmentEntry.COLUMN_TITLE);
-            int ColumnIndexStart = cursor.getColumnIndex(AssessmentEntry.COLUMN_START_TIME);
-            int ColumnIndexEnd = cursor.getColumnIndex(AssessmentEntry.COLUMN_END_TIME);
-
-            // Extract out the value from the Cursor for the given column index
-            String title = cursor.getString(ColumnIndexTitle);
-            String start = cursor.getString(ColumnIndexStart);
-            String end = cursor.getString(ColumnIndexEnd);
-
-            // Update the views on the screen with the values from the database
-            mEditTextTitle.setText(title);
-            mEditTextStart.setText(start);
-            mEditTextEnd.setText(end);
-
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // If the loader is invalidated, clear out all the data from the input fields.
-        mEditTextTitle.setText("");
-        mEditTextStart.setText("");
-        mEditTextEnd.setText("");
-    }
-
-    private void deleteAssessment() {
-        if (mCurrentAssessmentUri != null) {
-            int rowAffected = getContentResolver().delete(mCurrentAssessmentUri, null, null);
-            if (rowAffected == 0) {
-                Toast.makeText(this, R.string.error_delete_assessment_failed, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, R.string.msg_delete_assessment_successful, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void showDeleteConfirmationDialog() {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the positivie and negative buttons on the dialog.
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.msg_delete_dialog);
-        builder.setPositiveButton(R.string.action_dialog_delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                deleteAssessment();
-                finish();
-            }
-        });
-        builder.setNegativeButton(R.string.action_dialog_cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        // Create and show the AlertDialog
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
     }
 
     private void saveAssessment() {

@@ -22,6 +22,8 @@
     <!-- Title for the activity to add a new pet [CHAR LIMIT=20] -->
     <string name="title_activity_editor_new_assessment">Add a assessment</string>
 
+    <string name="title_activity_detailed_assessment">Detailed assessment</string>
+
     <!-- Label for editor menu option to save pet and leave editor [CHAR LIMIT=20] -->
     <string name="action_menu_save">Save</string>
 

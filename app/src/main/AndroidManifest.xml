@@ -24,15 +24,16 @@
                 android:value=".HomeActivity" />
         </activity>
 
-        <activity android:name=".DetailedAssessmentActivity" />
-
-        <activity
-            android:name=".EditorAssessmentActivity"
-            android:theme="@style/EditorActivityTheme">
+        <activity android:name=".DetailedAssessmentActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ListActivity" />
+        </activity>
+
+        <activity
+            android:name=".EditorAssessmentActivity"
+            android:theme="@style/EditorActivityTheme">
         </activity>
 
         <provider

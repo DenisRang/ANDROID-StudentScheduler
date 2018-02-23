@@ -35,6 +35,8 @@ public class ListActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+        setTitle(R.string.event_assessments);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.button_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +58,7 @@ public class ListActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Uri currentPetUri = ContentUris.withAppendedId(AssessmentEntry.CONTENT_URI, id);
-                Intent intent = new Intent(ListActivity.this, EditorAssessmentActivity.class);
+                Intent intent = new Intent(ListActivity.this, DetailedAssessmentActivity.class);
                 intent.setData(currentPetUri);
                 startActivity(intent);
             }

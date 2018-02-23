@@ -8,7 +8,9 @@
 
     <TextView
         android:id="@+id/text_detailed_assessment"
+        style="@style/ListActivityItemStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:text="TextView" />
 </android.support.constraint.ConstraintLayout>
