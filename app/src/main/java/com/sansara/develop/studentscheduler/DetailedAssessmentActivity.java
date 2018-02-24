@@ -24,6 +24,9 @@ import android.widget.Toast;
 
 import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class DetailedAssessmentActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -37,13 +40,14 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
 
     private Uri mCurrentAssessmentUri;
 
-    private TextView mTextView;
+    @BindView(R.id.text_detailed_assessment) TextView mTextView;
     private Bundle mBundleExistingAssessment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_assessment);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         mCurrentAssessmentUri = intent.getData();
@@ -52,9 +56,6 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
         getLoaderManager().initLoader(EXISTING_ASSESSMENT_LOADER, null, this);
 
         mBundleExistingAssessment = new Bundle();
-
-        mTextView = (TextView) findViewById(R.id.text_detailed_assessment);
-
     }
 
     @Override

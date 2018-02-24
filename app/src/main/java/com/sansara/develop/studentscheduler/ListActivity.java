@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.sansara.develop.studentscheduler.data.EventContract;
 
+import butterknife.BindView;
+
 /**
  * Displays list of events(terms,courses or assessments) that were entered and stored in the app.
  */

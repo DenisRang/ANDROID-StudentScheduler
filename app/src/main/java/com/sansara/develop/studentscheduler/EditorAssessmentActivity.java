@@ -10,6 +10,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -22,33 +23,36 @@ import android.widget.Toast;
 
 import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
 
+import butterknife.BindView;
+import butterknife.BindViews;
+import butterknife.ButterKnife;
+import butterknife.OnTouch;
+
 
 public class EditorAssessmentActivity extends AppCompatActivity {
 
     private Uri mCurrentAssessmentUri;
 
-    private EditText mEditTextTitle;
-    private EditText mEditTextStart;
-    private EditText mEditTextEnd;
-
-    private boolean mAssessmentHasChanged = false;
+    @BindViews({R.id.edit_assessment_title, R.id.edit_assessment_start_time, R.id.edit_assessment_end_time})
+    EditText[] mEditTexts;
 
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
      * the view
      */
-    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            mAssessmentHasChanged = true;
-            return false;
-        }
-    };
+    @OnTouch({R.id.edit_assessment_title, R.id.edit_assessment_start_time, R.id.edit_assessment_end_time})
+    boolean onChangingAssessment() {
+        mAssessmentHasChanged = true;
+        return false;
+    }
+
+    private boolean mAssessmentHasChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor_assessment);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         mCurrentAssessmentUri = intent.getData();
@@ -61,29 +65,22 @@ public class EditorAssessmentActivity extends AppCompatActivity {
             setTitle(getString(R.string.title_activity_editor_edit_assessment));
         }
 
-        // Find all relevant views that we will need to read user input from
-        mEditTextTitle = (EditText) findViewById(R.id.edit_assessment_title);
-        mEditTextStart = (EditText) findViewById(R.id.edit_assessment_start_time);
-        mEditTextEnd = (EditText) findViewById(R.id.edit_assessment_end_time);
-
-        // Setup OnTouchListeners on all the input fields, so we can determine if the user
-        // has touched or modified them. This will let us know if there are unsaved changes
-        // or not, if the user tries to leave the editor without saving.
-        mEditTextTitle.setOnTouchListener(mTouchListener);
-        mEditTextStart.setOnTouchListener(mTouchListener);
-        mEditTextEnd.setOnTouchListener(mTouchListener);
-
         Bundle bundle = intent.getBundleExtra(DetailedAssessmentActivity.EXTRA_EXISTING_ASSESSMENT_BUNDLE);
         if (bundle != null && !bundle.isEmpty()) {
             // Extract out the value from the Bundle for the given column index
-            String title = bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_TITLE);
-            String start = bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_START);
-            String end = bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_END);
+            final String[] dataInEditTexts = {bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_TITLE),
+                    bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_START),
+                    bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_END)};
 
             // Update the views on the screen with the values from the database
-            if (title != null && !TextUtils.isEmpty(title)) mEditTextTitle.setText(title);
-            if (title != null && !TextUtils.isEmpty(start)) mEditTextStart.setText(start);
-            if (title != null && !TextUtils.isEmpty(end)) mEditTextEnd.setText(end);
+            ButterKnife.Action updateEditTexts = new ButterKnife.Action<EditText>() {
+                @Override
+                public void apply(@NonNull EditText editText, int index) {
+                    if (dataInEditTexts[index] != null && !TextUtils.isEmpty(dataInEditTexts[index]))
+                        mEditTexts[0].setText(dataInEditTexts[index]);
+                }
+            };
+            ButterKnife.apply(mEditTexts, updateEditTexts);
         }
     }
 
@@ -157,9 +154,15 @@ public class EditorAssessmentActivity extends AppCompatActivity {
     private void saveAssessment() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
-        String title = mEditTextTitle.getText().toString().trim();
-        String start = mEditTextStart.getText().toString().trim();
-        String end = mEditTextEnd.getText().toString().trim();
+        ButterKnife.Action getTexts = new ButterKnife.Action<EditText>() {
+            @Override
+            public void apply(@NonNull EditText editText, int index) {
+                editText.getText().toString().trim();
+            }
+        };
+        String title = mEditTexts[0].getText().toString().trim();
+        String start = mEditTexts[1].getText().toString().trim();
+        String end = mEditTexts[2].getText().toString().trim();
 
         // Check if this is supposed to be a new pet
         // and check if all the fields in the editor are blank

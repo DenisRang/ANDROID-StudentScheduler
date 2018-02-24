@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.sansara.develop.studentscheduler.data.EventContract;
 
+import butterknife.BindView;
+
 /**
  * {@link AssessmentCursorAdapter} is an adapter for a list or grid view
  * that uses a {@link Cursor} of assessment data as its data source. This adapter knows
