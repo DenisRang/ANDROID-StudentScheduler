@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -39,6 +40,7 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
     private static final int EXISTING_ASSESSMENT_LOADER = 0;
 
     private Uri mCurrentAssessmentUri;
+    private String TAG = DetailedAssessmentActivity.class.getSimpleName();
 
     @BindView(R.id.text_detailed_assessment) TextView mTextView;
     private Bundle mBundleExistingAssessment;
@@ -48,6 +50,7 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_assessment);
         ButterKnife.bind(this);
+        Log.e(TAG,"         onCreate");
 
         Intent intent = getIntent();
         mCurrentAssessmentUri = intent.getData();
@@ -81,7 +84,7 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(DetailedAssessmentActivity.this);
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -177,5 +180,40 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
         // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(TAG,"         onStart");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e(TAG,"         onRestart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(TAG,"         onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e(TAG,"         onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e(TAG,"         onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG,"         onDestroy");
     }
 }
