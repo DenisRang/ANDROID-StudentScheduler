@@ -1,4 +1,4 @@
-package com.sansara.develop.studentscheduler;
+package com.sansara.develop.studentscheduler.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,24 +8,23 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import com.sansara.develop.studentscheduler.R;
 import com.sansara.develop.studentscheduler.data.EventContract;
 
-import butterknife.BindView;
-
 /**
- * {@link AssessmentCursorAdapter} is an adapter for a list or grid view
+ * {@link ListCursorAdapter} is an adapter for a list or grid view
  * that uses a {@link Cursor} of assessment data as its data source. This adapter knows
  * how to create list items for each row of assessment data in the {@link Cursor}.
  */
-public class AssessmentCursorAdapter extends CursorAdapter {
+public class ListCursorAdapter extends CursorAdapter {
 
     /**
-     * Constructs a new {@link AssessmentCursorAdapter}.
+     * Constructs a new {@link ListCursorAdapter}.
      *
      * @param context The context
      * @param c       The cursor from which to get the data.
      */
-    public AssessmentCursorAdapter(Context context, Cursor c) {
+    public ListCursorAdapter(Context context, Cursor c) {
         super(context, c, 0 /* flags */);
     }
 

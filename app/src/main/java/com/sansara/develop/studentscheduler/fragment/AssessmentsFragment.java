@@ -1,32 +1,27 @@
-package com.sansara.develop.studentscheduler;
+package com.sansara.develop.studentscheduler.fragment;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.sansara.develop.studentscheduler.adapter.ListCursorAdapter;
+import com.sansara.develop.studentscheduler.DetailedAssessmentActivity;
+import com.sansara.develop.studentscheduler.EditorAssessmentActivity;
+import com.sansara.develop.studentscheduler.ListActivity;
+import com.sansara.develop.studentscheduler.R;
 import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -37,7 +32,7 @@ import butterknife.Unbinder;
  */
 public class AssessmentsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int ASSESSMENT_LOADER = 0;
-    private AssessmentCursorAdapter mAssessmentCursorAdapter;
+    private ListCursorAdapter mListCursorAdapter;
     private Context mContext;
     private Unbinder mUnbinder;
 
@@ -49,9 +44,9 @@ public class AssessmentsFragment extends Fragment implements LoaderManager.Loade
 
     @OnItemClick(R.id.list_fragment_list)
     void onDetailingAssessment(long id) {
-        Uri currentPetUri = ContentUris.withAppendedId(AssessmentEntry.CONTENT_URI, id);
+        Uri currentUri = ContentUris.withAppendedId(AssessmentEntry.CONTENT_URI, id);
         Intent intent = new Intent(mContext, DetailedAssessmentActivity.class);
-        intent.setData(currentPetUri);
+        intent.setData(currentUri);
         startActivity(intent);
     }
 
@@ -73,8 +68,8 @@ public class AssessmentsFragment extends Fragment implements LoaderManager.Loade
         View emptyView = rootView.findViewById(R.id.relative_layout_empty_view);
         assessmentsListView.setEmptyView(emptyView);
 
-        mAssessmentCursorAdapter = new AssessmentCursorAdapter(mContext, null);
-        assessmentsListView.setAdapter(mAssessmentCursorAdapter);
+        mListCursorAdapter = new ListCursorAdapter(mContext, null);
+        assessmentsListView.setAdapter(mListCursorAdapter);
 
         getLoaderManager().initLoader(ASSESSMENT_LOADER, null, this);
 
@@ -84,7 +79,7 @@ public class AssessmentsFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
+//        mUnbinder.unbind();
     }
 
     @Override
@@ -105,11 +100,11 @@ public class AssessmentsFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader loader, Cursor data) {
-        mAssessmentCursorAdapter.swapCursor(data);
+        mListCursorAdapter.swapCursor(data);
 
         // Adding the ability to delete all of assessments in ListActivity optional menu
         if (mContext instanceof ListActivity) {
-            if (mAssessmentCursorAdapter.getCount() == 0) {
+            if (mListCursorAdapter.getCount() == 0) {
                 ((ListActivity) mContext).hideOption(R.id.item_delete_all_entries);
             } else {
                 ((ListActivity) mContext).showOption(R.id.item_delete_all_entries);
@@ -119,7 +114,7 @@ public class AssessmentsFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoaderReset(Loader loader) {
-        mAssessmentCursorAdapter.swapCursor(null);
+        mListCursorAdapter.swapCursor(null);
     }
 
 }

@@ -24,6 +24,10 @@
 
     <string name="title_activity_detailed_assessment">Detailed assessment</string>
 
+    <string name="title_activity_detailed_course">Detailed course</string>
+
+    <string name="title_activity_detailed_term">Detailed term</string>
+
     <!-- Label for editor menu option to save pet and leave editor [CHAR LIMIT=20] -->
     <string name="action_menu_save">Save</string>
 
@@ -65,8 +69,14 @@
     <!-- Toast message in editor when current pet has failed to be deleted [CHAR LIMIT=NONE] -->
     <string name="error_delete_assessment_failed">Error with deleting assessment</string>
 
+    <string name="tab_course_info">Info</string>
+    <string name="tab_course_assessments">The assessments</string>
+    <string name="tab_course_mentors">Mentors</string>
+
     <!-- Dialog message to ask the user to confirm deleting the current pet [CHAR LIMIT=NONE] -->
-    <string name="msg_delete_dialog">Delete this assessment?</string>
+    <string name="msg_delete_assessment_dialog">Delete this assessment?</string>
+    <string name="msg_delete_course_dialog">Delete this course?</string>
+    <string name="msg_delete_term_dialog">Delete this term?</string>
 
     <string name="msg_delete_all">Delete all items?</string>
 

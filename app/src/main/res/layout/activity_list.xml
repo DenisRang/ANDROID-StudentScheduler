@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/fragment_list"
-        android:name="com.sansara.develop.studentscheduler.AssessmentsFragment"
+        android:name="com.sansara.develop.studentscheduler.fragment.AssessmentsFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:layout="@layout/fragment_list"/>

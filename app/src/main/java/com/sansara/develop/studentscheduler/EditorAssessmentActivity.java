@@ -103,7 +103,7 @@ public class EditorAssessmentActivity extends AppCompatActivity {
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
                 if (!mAssessmentHasChanged) {
-                    NavUtils.navigateUpFromSameTask(EditorAssessmentActivity.this);
+                    finish();
                     return true;
                 }
 
@@ -115,7 +115,7 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 // User clicked "Discard" button, navigate to parent activity.
-                                NavUtils.navigateUpFromSameTask(EditorAssessmentActivity.this);
+                                finish();
                             }
                         };
 

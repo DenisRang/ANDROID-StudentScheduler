@@ -158,7 +158,7 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the positivie and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.msg_delete_dialog);
+        builder.setMessage(R.string.msg_delete_assessment_dialog);
         builder.setPositiveButton(R.string.action_dialog_delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 deleteAssessment();
