@@ -2,6 +2,7 @@ package com.sansara.develop.studentscheduler;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import com.sansara.develop.studentscheduler.adapter.CourseTabAdapter;
 import com.sansara.develop.studentscheduler.data.EventContract;
 import com.sansara.develop.studentscheduler.fragment.AssessmentsFragment;
 import com.sansara.develop.studentscheduler.fragment.DetailedCourseFragment;
+import com.sansara.develop.studentscheduler.fragment.MentorsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +35,7 @@ public class DetailedActivity extends AppCompatActivity {
     public Uri mContentUri;
 
     private Bundle mBundle;
+    private long mCourseId;
 
     TabLayout mTabLayout;
 
@@ -47,6 +50,7 @@ public class DetailedActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mContentUri = intent.getData();
+        mCourseId = ContentUris.parseId(mContentUri);
 
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout_detailed);
         mViewPager = (ViewPager) findViewById(R.id.pager_detailed);
@@ -61,7 +65,7 @@ public class DetailedActivity extends AppCompatActivity {
                 break;
             case HomeActivity.EVENT_ID_COURSE:
                 setTitle(getString(R.string.title_activity_detailed_course));
-                CourseTabAdapter adapter = new CourseTabAdapter(getFragmentManager(), 3);
+                CourseTabAdapter adapter = new CourseTabAdapter(getFragmentManager(), 3, mCourseId);
                 mViewPager.setAdapter(adapter);
                 break;
         }
@@ -99,6 +103,7 @@ public class DetailedActivity extends AppCompatActivity {
             case R.id.item_action_redo:
                 Intent intent = new Intent(DetailedActivity.this, EditorCourseActivity.class);
                 intent.putExtra(EXTRA_EXISTING_COURSE_BUNDLE, mBundle);
+                intent.putExtra(MentorsFragment.EXTRA_COURSE_ID,mCourseId);
                 intent.setData(mContentUri);
                 startActivity(intent);
                 return true;

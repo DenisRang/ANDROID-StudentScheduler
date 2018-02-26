@@ -38,6 +38,13 @@
                 android:value=".ListActivity" />
         </activity>
 
+        <activity android:name=".DetailedMentorActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ListActivity" />
+        </activity>
+
         <activity
             android:name=".EditorAssessmentActivity"
             android:theme="@style/EditorActivityTheme">
@@ -48,6 +55,14 @@
 
         <activity
             android:name=".EditorCourseActivity"
+            android:theme="@style/EditorActivityTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ListActivity" />
+        </activity>
+
+        <activity
+            android:name=".EditorMentorActivity"
             android:theme="@style/EditorActivityTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.sansara.develop.studentscheduler.DetailedActivity;
+import com.sansara.develop.studentscheduler.adapter.CourseTabAdapter;
 import com.sansara.develop.studentscheduler.adapter.ListCursorAdapter;
 import com.sansara.develop.studentscheduler.DetailedAssessmentActivity;
 import com.sansara.develop.studentscheduler.EditorAssessmentActivity;
@@ -56,7 +58,7 @@ public class AssessmentsFragment extends Fragment implements LoaderManager.Loade
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
         mUnbinder = ButterKnife.bind(this, rootView);
-        Log.e(TAG,"         onCreateView");
+        Log.e(TAG, "         onCreateView");
 
 
         mContext = getActivity();
@@ -79,7 +81,7 @@ public class AssessmentsFragment extends Fragment implements LoaderManager.Loade
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
-        Log.e(TAG,"         onDestroyView");
+        Log.e(TAG, "         onDestroyView");
 
     }
 
@@ -90,12 +92,18 @@ public class AssessmentsFragment extends Fragment implements LoaderManager.Loade
                 AssessmentEntry.COLUMN_TITLE,
                 AssessmentEntry.COLUMN_START_TIME,
                 AssessmentEntry.COLUMN_END_TIME};
+        String selection = null;
+        String[] selectionArgs = null;
+        if (getArguments() != null) {
+            selection = AssessmentEntry.COLUMN_COURSE_ID + "=?";
+            selectionArgs = new String[]{String.valueOf(getArguments().getLong(CourseTabAdapter.COURSE_ID))};
+        }
         return new CursorLoader(
                 mContext,
                 AssessmentEntry.CONTENT_URI,
                 projection,
-                null,
-                null,
+                selection,
+                selectionArgs,
                 null);
     }
 
@@ -121,54 +129,54 @@ public class AssessmentsFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.e(TAG,"         onAttach");
+        Log.e(TAG, "         onAttach");
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(TAG,"         onCreate");
+        Log.e(TAG, "         onCreate");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.e(TAG,"         onActivityCreated");
+        Log.e(TAG, "         onActivityCreated");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.e(TAG,"         onStart");
+        Log.e(TAG, "         onStart");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.e(TAG,"         onResume");
+        Log.e(TAG, "         onResume");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.e(TAG,"         onPause");
+        Log.e(TAG, "         onPause");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.e(TAG,"         onStop");
+        Log.e(TAG, "         onStop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e(TAG,"         onDestroy");
+        Log.e(TAG, "         onDestroy");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.e(TAG,"         onDetach");
+        Log.e(TAG, "         onDetach");
     }
 }

@@ -30,7 +30,9 @@
 
     <string name="title_activity_detailed_course">Detailed course</string>
 
-    <string name="title_activity_detailed_term">Detailed term</string>
+    <string name="title_activity_detailed_term">Detailed term</string>\
+
+    <string name="title_activity_detailed_mentor">Detailed term</string>
 
     <!-- Label for editor menu option to save pet and leave editor [CHAR LIMIT=20] -->
     <string name="action_menu_save">Save</string>
@@ -41,18 +43,26 @@
     <string name="action_menu_redo">Change</string>
 
     <!-- Toast message in editor when new pet has been successfully inserted [CHAR LIMIT=NONE] -->
-    <string name="msg_insert_assessment_successful">Course inserted</string>
+    <string name="msg_insert_assessment_successful">Assessment inserted</string>
     <string name="msg_insert_course_successful">Course inserted</string>
+    <string name="msg_insert_mentor_successful">Mentor inserted</string>
+    <string name="msg_insert_term_successful">Term inserted</string>
 
-    <string name="msg_update_assessment_successful">Course updated</string>
+    <string name="msg_update_assessment_successful">Assessment updated</string>
     <string name="msg_update_course_successful">Course updated</string>
+    <string name="msg_update_mentor_successful">Mentor updated</string>
+    <string name="msg_update_term_successful">Term updated</string>
 
     <!-- Toast message in editor when new pet has failed to be inserted [CHAR LIMIT=NONE] -->
     <string name="error_insert_assessment_failed">Error with inserting assessment</string>
     <string name="error_insert_course_failed">Error with inserting course</string>
-    <string name="error_update_course_failed">Error with inserting course</string>
+    <string name="error_insert_mentor_failed">Error with inserting mentor</string>
+    <string name="error_insert_term_failed">Error with inserting term</string>
 
+    <string name="error_update_course_failed">Error with inserting course</string>
     <string name="error_update_assessment_failed">Error with updating assessment</string>
+    <string name="error_update_mentor_failed">Error with updating mentor</string>
+    <string name="error_update_term_failed">Error with updating term</string>
 
     <!-- Title text for the empty view, which describes the empty dog house image [CHAR LIMIT=50] -->
     <string name="empty_view_title_text">It\'s a bit lonely here...</string>
@@ -88,6 +98,7 @@
     <string name="msg_delete_assessment_dialog">Delete this assessment?</string>
     <string name="msg_delete_course_dialog">Delete this course?</string>
     <string name="msg_delete_term_dialog">Delete this term?</string>
+    <string name="msg_delete_mentor_dialog">Delete this mentor?</string>
 
     <string name="msg_delete_all">Delete all items?</string>
 
@@ -97,7 +108,9 @@
     <!-- Dialog button text for the option to cancel deletion of the current pet [CHAR LIMIT=20] -->
     <string name="action_dialog_cancel">Cancel</string>
     <string name="error_delete_assessment_failed">Error with deleting assessment</string>
+    <string name="error_delete_mentor_failed">Error with deleting mentor</string>
     <string name="msg_delete_assessment_successful">Assessment Deleted</string>
+    <string name="msg_delete_mentor_successful">Mentor Deleted</string>
 
     <string name="msg_spinner_courses">For the course:</string>
     <string name="msg_spinner_terms">For the Term:</string>
@@ -113,4 +126,13 @@
     <string name="status_unknown">Unknown</string>
 
     <string name="note">Note</string>
+
+    <string name="name_hint">Name</string>
+    <string name="name_text">Name:</string>
+    <string name="phone_hint">Phone</string>
+    <string name="phone_text">Phone:</string>
+    <string name="call">Call</string>
+    <string name="write">Write</string>
+    <string name="email_hint">E-mail</string>
+    <string name="email_text">E-mail:</string>
 </resources>

@@ -2,6 +2,7 @@ package com.sansara.develop.studentscheduler;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -13,7 +14,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,7 +29,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.sansara.develop.studentscheduler.data.EventContract;
-import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
+import com.sansara.develop.studentscheduler.data.EventContract.MentorEntry;
+import com.sansara.develop.studentscheduler.fragment.MentorsFragment;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -33,53 +38,76 @@ import butterknife.ButterKnife;
 import butterknife.OnTouch;
 
 
-public class EditorAssessmentActivity extends AppCompatActivity {
+public class EditorMentorActivity extends AppCompatActivity {
 
-    private Uri mCurrentAssessmentUri;
+    private Uri mCurrentMentorUri;
 
-    @BindViews({R.id.edit_assessment_title, R.id.edit_assessment_start_date, R.id.edit_assessment_start_time,
-            R.id.edit_assessment_end_date, R.id.edit_assessment_end_time})
+    @BindViews({R.id.edit_name, R.id.edit_phone, R.id.edit_email})
     EditText[] mEditTexts;
-    @BindView(R.id.spinner_for_courses)
-    Spinner mSpinnerCourses;
-    private int mCourseId;
 
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
      * the view
      */
-    @OnTouch({R.id.edit_assessment_title, R.id.edit_assessment_start_date, R.id.edit_assessment_start_time,
-            R.id.edit_assessment_end_date, R.id.edit_assessment_end_time})
-    boolean onChangingAssessment() {
-        mAssessmentHasChanged = true;
+    @OnTouch({R.id.edit_name, R.id.edit_phone, R.id.edit_email})
+    boolean onChangingMentor() {
+        mMentorHasChanged = true;
         return false;
     }
 
-    private boolean mAssessmentHasChanged = false;
+    private boolean mMentorHasChanged = false;
+    private long mCourseId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editor_assessment);
+        setContentView(R.layout.activity_editor_mentor);
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        mCurrentAssessmentUri = intent.getData();
+        mCurrentMentorUri = intent.getData();
+        mCourseId = intent.getExtras().getLong(MentorsFragment.EXTRA_COURSE_ID);
 
-        if (mCurrentAssessmentUri == null) {
-            setTitle(getString(R.string.title_activity_editor_new_assessment));
 
+        if (mCurrentMentorUri == null) {
+            setTitle(getString(R.string.title_activity_editor_new_mentor));
             invalidateOptionsMenu();
         } else {
-            setTitle(getString(R.string.title_activity_editor_edit_assessment));
+            setTitle(getString(R.string.title_activity_editor_edit_mentor));
         }
 
-        Bundle bundle = intent.getBundleExtra(DetailedAssessmentActivity.EXTRA_EXISTING_ASSESSMENT_BUNDLE);
+
+        mEditTexts[1].addTextChangedListener(new TextWatcher() {
+            String lastChar = " ";
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int digits = mEditTexts[1].getText().toString().length();
+                if (digits > 1)
+                    lastChar = mEditTexts[1].getText().toString().substring(digits - 1);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int digits = mEditTexts[1].getText().toString().length();
+                if (!lastChar.equals("-")) {
+                    if (digits == 3 || digits == 7) {
+                        mEditTexts[1].append("-");
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        Bundle bundle = intent.getBundleExtra(DetailedMentorActivity.EXTRA_EXISTING_MENTOR_BUNDLE);
         if (bundle != null && !bundle.isEmpty()) {
             // Extract out the value from the Bundle for the given column index
-            final String[] dataInEditTexts = {bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_TITLE),
-                    bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_START),
-                    bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_END)};
+            final String[] dataInEditTexts = {bundle.getString(DetailedMentorActivity.EXISTING_MENTOR_NAME),
+                    bundle.getString(DetailedMentorActivity.EXISTING_MENTOR_PHONE),
+                    bundle.getString(DetailedMentorActivity.EXISTING_MENTOR_EMAIL)};
 
             // Update the views on the screen with the values from the database
             ButterKnife.Action updateEditTexts = new ButterKnife.Action<EditText>() {
@@ -89,9 +117,9 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                         mEditTexts[index].setText(dataInEditTexts[index]);
                 }
             };
-            ButterKnife.apply(mEditTexts[0], updateEditTexts);
+            ButterKnife.apply(mEditTexts, updateEditTexts);
         }
-        setupSpinnerCourses();
+
     }
 
     @Override
@@ -106,13 +134,13 @@ public class EditorAssessmentActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.item_action_save:
-                saveAssessment();
+                saveMentor();
                 // Exit activity
                 finish();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
-                if (!mAssessmentHasChanged) {
+                if (!mMentorHasChanged) {
                     finish();
                     return true;
                 }
@@ -141,7 +169,7 @@ public class EditorAssessmentActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        if (!mAssessmentHasChanged) {
+        if (!mMentorHasChanged) {
             super.onBackPressed();
             return;
         }
@@ -161,38 +189,7 @@ public class EditorAssessmentActivity extends AppCompatActivity {
         showUnsavedChangesDialog(discardButtonClickListener);
     }
 
-    private void setupSpinnerCourses() {
-        String[] projection = {
-                EventContract.CourseEntry._ID,
-                EventContract.CourseEntry.COLUMN_TITLE};
-        Cursor cursor = getContentResolver().query(EventContract.CourseEntry.CONTENT_URI, projection, null, null, null);
-
-        if (cursor.getCount() > 0) {
-            String[] from = new String[]{EventContract.CourseEntry.COLUMN_TITLE};
-            // create an array of the display item we want to bind our data to
-            int[] to = new int[]{android.R.id.text1};
-            SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item,
-                    cursor, from, to);
-            mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            mSpinnerCourses.setAdapter(mAdapter);
-        }
-
-        mSpinnerCourses.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            public void onItemSelected(AdapterView parent, View view,
-                                       int pos, long log) {
-
-                Cursor c = (Cursor) parent.getItemAtPosition(pos);
-                mCourseId = c.getInt(c.getColumnIndexOrThrow(EventContract.CourseEntry._ID));
-            }
-
-            public void onNothingSelected(AdapterView arg0) {
-
-            }
-        });
-    }
-
-    private void saveAssessment() {
+    private void saveMentor() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         ButterKnife.Action getTexts = new ButterKnife.Action<EditText>() {
@@ -201,59 +198,59 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                 editText.getText().toString().trim();
             }
         };
-        String title = mEditTexts[0].getText().toString().trim();
-        String start = mEditTexts[1].getText().toString().trim();
-        String end = mEditTexts[2].getText().toString().trim();
+        String name = mEditTexts[0].getText().toString().trim();
+        String phone = mEditTexts[1].getText().toString().trim();
+        String email = mEditTexts[2].getText().toString().trim();
 
         // Check if this is supposed to be a new pet
         // and check if all the fields in the editor are blank
-        if (mCurrentAssessmentUri == null &&
-                TextUtils.isEmpty(title) && TextUtils.isEmpty(start) &&
-                TextUtils.isEmpty(end)) {
-            // Since no fields were modified, we can return early without creating a new assessment.
+        if (mCurrentMentorUri == null &&
+                TextUtils.isEmpty(name) && TextUtils.isEmpty(phone) &&
+                TextUtils.isEmpty(email)) {
+            // Since no fields were modified, we can return early without creating a new mentor.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
         }
 
         // Create a ContentValues object where column names are the keys,
-        // and assessment attributes from the editor are the values.
+        // and mentor attributes from the editor are the values.
         ContentValues values = new ContentValues();
-        values.put(AssessmentEntry.COLUMN_TITLE, title);
-        values.put(AssessmentEntry.COLUMN_START_TIME, start);
-        values.put(AssessmentEntry.COLUMN_END_TIME, end);
-        values.put(AssessmentEntry.COLUMN_COURSE_ID, mCourseId);
+        values.put(MentorEntry.COLUMN_NAME, name);
+        values.put(MentorEntry.COLUMN_PHONE, phone);
+        values.put(MentorEntry.COLUMN_EMAIL, email);
+        values.put(MentorEntry.COLUMN_COURSE_ID, mCourseId);
 
-        // Determine if this is a new or existing assessment by checking if mCurrentAssessmentUri is null or not
-        if (mCurrentAssessmentUri == null) {
-            // This is a NEW pet, so insert a new assessment into the provider,
-            // returning the content URI for the new assessment.
-            Uri newUri = getContentResolver().insert(AssessmentEntry.CONTENT_URI, values);
+        // Determine if this is a new or existing mentor by checking if mCurrentMentorUri is null or not
+        if (mCurrentMentorUri == null) {
+            // This is a NEW pet, so insert a new mentor into the provider,
+            // returning the content URI for the new mentor.
+            Uri newUri = getContentResolver().insert(MentorEntry.CONTENT_URI, values);
 
             // Show a toast message depending on whether or not the insertion was successful.
             if (newUri == null) {
                 // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, getString(R.string.error_insert_assessment_failed),
+                Toast.makeText(this, getString(R.string.error_insert_mentor_failed),
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.msg_insert_assessment_successful),
+                Toast.makeText(this, getString(R.string.msg_insert_mentor_successful),
                         Toast.LENGTH_SHORT).show();
             }
         } else {
-            // Otherwise this is an EXISTING assessment, so update the assessment with content URI: mCurrentAssessmentUri
+            // Otherwise this is an EXISTING mentor, so update the mentor with content URI: mCurrentMentorUri
             // and pass in the new ContentValues. Pass in null for the selection and selection args
-            // because mCurrentAssessmentUri will already identify the correct row in the database that
+            // because mCurrentMentorUri will already identify the correct row in the database that
             // we want to modify.
-            int rowsAffected = getContentResolver().update(mCurrentAssessmentUri, values, null, null);
+            int rowsAffected = getContentResolver().update(mCurrentMentorUri, values, null, null);
 
             // Show a toast message depending on whether or not the update was successful.
             if (rowsAffected == 0) {
                 // If no rows were affected, then there was an error with the update.
-                Toast.makeText(this, getString(R.string.error_update_assessment_failed),
+                Toast.makeText(this, getString(R.string.error_update_mentor_failed),
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the update was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.msg_update_assessment_successful),
+                Toast.makeText(this, getString(R.string.msg_update_mentor_successful),
                         Toast.LENGTH_SHORT).show();
             }
         }

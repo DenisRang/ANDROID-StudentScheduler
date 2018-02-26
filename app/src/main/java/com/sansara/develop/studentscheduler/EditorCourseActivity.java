@@ -48,6 +48,8 @@ public class EditorCourseActivity extends AppCompatActivity {
     Spinner mSpinnerTerms;
     @BindView(R.id.spinner_status)
     Spinner mSpinnerStatus;
+    @BindView(R.id.edit_note)
+    EditText mEditTextNote;
 
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
