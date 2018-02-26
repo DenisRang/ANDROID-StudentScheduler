@@ -9,11 +9,11 @@
     android:background="@color/fon"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".EditorAssessmentActivity">
+    tools:context=".EditorCourseActivity">
 
     <!-- Title field -->
     <EditText
-        android:id="@+id/edit_assessment_title"
+        android:id="@+id/edit_course_title"
         style="@style/EditorFieldStyle"
         android:hint="@string/title_hint"
         android:inputType="textCapWords" />
@@ -31,7 +31,7 @@
 
         <!-- Start time field -->
         <EditText
-            android:id="@+id/edit_assessment_start_date"
+            android:id="@+id/edit_course_start_date"
             style="@style/EditorFieldStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
 
         <!-- End time field -->
         <EditText
-            android:id="@+id/edit_assessment_start_time"
+            android:id="@+id/edit_course_start_time"
             style="@style/EditorFieldStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
 
         <!-- Start time field -->
         <EditText
-            android:id="@+id/edit_assessment_end_date"
+            android:id="@+id/edit_course_end_date"
             style="@style/EditorFieldStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
 
         <!-- End time field -->
         <EditText
-            android:id="@+id/edit_assessment_end_time"
+            android:id="@+id/edit_course_end_time"
             style="@style/EditorFieldStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -84,25 +84,51 @@
 
     </LinearLayout>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="16dp">
 
         <TextView
-            android:id="@+id/text_spinner_for_courses"
+            android:id="@+id/text_spinner_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/msg_spinner_courses" />
+            android:text="@string/msg_spinner_status" />
 
         <Spinner
-            android:id="@+id/spinner_for_courses"
+            android:id="@+id/spinner_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/text_spinner_for_terms"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/msg_spinner_terms" />
+
+        <Spinner
+            android:id="@+id/spinner_for_terms"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edit_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:hint= "@string/note"/>
 
 </LinearLayout>

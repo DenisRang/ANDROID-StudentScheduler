@@ -33,17 +33,11 @@ import butterknife.Unbinder;
  * Displays list of events(terms,courses or assessments) that were entered and stored in the app.
  */
 public class AssessmentsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    private static final int ASSESSMENT_LOADER = 0;
+    private static final int ASSESSMENTS_LOADER = 0;
     private ListCursorAdapter mListCursorAdapter;
     private Context mContext;
     private Unbinder mUnbinder;
     private String TAG = AssessmentsFragment.class.getSimpleName();
-
-    @OnClick(R.id.button_add)
-    void onAddingAssessment() {
-        Intent intent = new Intent(mContext, EditorAssessmentActivity.class);
-        startActivity(intent);
-    }
 
     @OnItemClick(R.id.list_fragment_list)
     void onDetailingAssessment(long id) {
@@ -76,7 +70,7 @@ public class AssessmentsFragment extends Fragment implements LoaderManager.Loade
         mListCursorAdapter = new ListCursorAdapter(mContext, null);
         assessmentsListView.setAdapter(mListCursorAdapter);
 
-        getLoaderManager().initLoader(ASSESSMENT_LOADER, null, this);
+        getLoaderManager().initLoader(ASSESSMENTS_LOADER, null, this);
 
         return rootView;
     }
@@ -84,7 +78,7 @@ public class AssessmentsFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        mUnbinder.unbind();
+        mUnbinder.unbind();
         Log.e(TAG,"         onDestroyView");
 
     }

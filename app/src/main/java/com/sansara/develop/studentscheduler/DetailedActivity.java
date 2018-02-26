@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
@@ -29,9 +30,9 @@ import static com.sansara.develop.studentscheduler.fragment.DetailedCourseFragme
  * Displays list of events(terms,courses or assessments) that were entered and stored in the app.
  */
 public class DetailedActivity extends AppCompatActivity {
-    private Menu mMenu;
-    private Fragment mFragmentList;
     public Uri mContentUri;
+
+    private Bundle mBundle;
 
     TabLayout mTabLayout;
 
@@ -78,7 +79,6 @@ public class DetailedActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
     }
@@ -87,8 +87,7 @@ public class DetailedActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/fragment_list.xmlnts.xml file.
         // This adds menu items to the app bar.
-        getMenuInflater().inflate(R.menu.activity_list, menu);
-        mMenu = menu;
+        getMenuInflater().inflate(R.menu.activity_detailed, menu);
         return true;
     }
 
@@ -99,8 +98,7 @@ public class DetailedActivity extends AppCompatActivity {
             // Respond to a click on the "Change" menu option
             case R.id.item_action_redo:
                 Intent intent = new Intent(DetailedActivity.this, EditorCourseActivity.class);
-                intent.putExtra(EXTRA_EXISTING_COURSE_BUNDLE, ((DetailedCourseFragment) ((FragmentStatePagerAdapter) mViewPager.getAdapter())
-                        .getItem(0)).getBundleExistingCourse());
+                intent.putExtra(EXTRA_EXISTING_COURSE_BUNDLE, mBundle);
                 intent.setData(mContentUri);
                 startActivity(intent);
                 return true;
@@ -125,9 +123,9 @@ public class DetailedActivity extends AppCompatActivity {
         if (mContentUri != null) {
             int rowAffected = getContentResolver().delete(mContentUri, null, null);
             if (rowAffected == 0) {
-                Toast.makeText(this, R.string.error_delete_assessment_failed, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_delete_failed, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, R.string.msg_delete_assessment_successful, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.msg_delete_successful, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -157,4 +155,8 @@ public class DetailedActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+
+    public void setBundle(Bundle bundle) {
+        mBundle = bundle;
+    }
 }

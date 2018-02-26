@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.sansara.develop.studentscheduler.DetailedActivity;
 import com.sansara.develop.studentscheduler.EditorCourseActivity;
@@ -39,12 +40,6 @@ public class CoursesFragment extends Fragment implements LoaderManager.LoaderCal
     private ListCursorAdapter mListCursorAdapter;
     private Context mContext;
     private Unbinder mUnbinder;
-
-    @OnClick(R.id.button_add)
-    void onAddingCourses() {
-        Intent intent = new Intent(mContext, EditorCourseActivity.class);
-        startActivity(intent);
-    }
 
     @OnItemClick(R.id.list_fragment_list)
     void onDetailingCourses(long id) {

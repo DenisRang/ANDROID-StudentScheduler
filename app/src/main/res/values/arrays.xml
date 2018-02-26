@@ -1,0 +1,10 @@
+<resources>
+    <!-- These are the options displayed in the gender drop-down Spinner -->
+    <string-array name="array_status_options">
+        <item>@string/status_unknown</item>
+        <item>@string/status_in_progress</item>
+        <item>@string/status_completed</item>
+        <item>@string/status_dropped</item>
+        <item>@string/status_plan_to_take</item>
+    </string-array>
+</resources>

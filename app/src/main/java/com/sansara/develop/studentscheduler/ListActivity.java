@@ -2,7 +2,9 @@ package com.sansara.develop.studentscheduler;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,9 @@ import com.sansara.develop.studentscheduler.data.EventContract;
 import com.sansara.develop.studentscheduler.fragment.AssessmentsFragment;
 import com.sansara.develop.studentscheduler.fragment.CoursesFragment;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Displays list of events(terms,courses or assessments) that were entered and stored in the app.
  */
@@ -23,38 +28,41 @@ public class ListActivity extends AppCompatActivity {
     private Menu mMenu;
     private Fragment mFragmentList;
     private Uri mContentUri;
+    private Class mEditorClass;
+
+    @OnClick(R.id.button_add)
+    void onAddingAssessment() {
+        Intent intent = new Intent(this, mEditorClass);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        Log.e(TAG,"         onCreate");
+        ButterKnife.bind(this);
+        Log.e(TAG, "         onCreate");
 
-//        getFragmentManager().popBackStack();
-//        mFragmentList = (Fragment) getFragmentManager().findFragmentById(R.id.fragment_list);
-
-        Fragment fragment;
         int eventId = getIntent().getIntExtra(HomeActivity.EXTRA_EVENT_ID, -1);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
         switch (eventId) {
             case HomeActivity.EVENT_ID_TERM:
                 setTitle(getString(R.string.event_terms));
                 mContentUri = EventContract.TermEntry.CONTENT_URI;
+                //mEditorClass=
                 //mFragmentList.setTargetFragment(new TermsFragment(), eventId);
                 break;
             case HomeActivity.EVENT_ID_COURSE:
                 setTitle(getString(R.string.event_courses));
                 mContentUri = EventContract.CourseEntry.CONTENT_URI;
-                getFragmentManager().popBackStack();
-                getFragmentManager().beginTransaction()
-                        .add(R.id.linear_layout_fragment_list, new CoursesFragment()).addToBackStack(null).commit();
+                mEditorClass = EditorCourseActivity.class;
+                ft.add(R.id.frame_layout_for_list_fragment, new CoursesFragment()).commit();
                 break;
             case HomeActivity.EVENT_ID_ASSESSMENT:
                 setTitle(getString(R.string.event_assessments));
                 mContentUri = EventContract.AssessmentEntry.CONTENT_URI;
-                getFragmentManager().beginTransaction()
-                        .add(R.id.linear_layout_fragment_list, new AssessmentsFragment()).addToBackStack(null).commit();
-//                fragment=new AssessmentsFragment();
-//                fragment.setTargetFragment(mFragmentList, eventId);
+                mEditorClass = EditorAssessmentActivity.class;
+                ft.add(R.id.frame_layout_for_list_fragment, new AssessmentsFragment()).commit();
                 break;
         }
     }
@@ -117,46 +125,46 @@ public class ListActivity extends AppCompatActivity {
     private void deleteAllItems() {
         int rowAffected = getContentResolver().delete(mContentUri, null, null);
         if (rowAffected == 0) {
-            Toast.makeText(this, R.string.error_delete_assessment_failed, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_delete_failed) + " " + getTitle(), Toast.LENGTH_SHORT).show();
         } else {
             hideOption(R.id.item_delete_all_entries);
-            Toast.makeText(this, R.string.msg_delete_assessment_successful, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getTitle() + " " + getString(R.string.msg_delete_successful), Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e(TAG,"         onStart");
+        Log.e(TAG, "         onStart");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.e(TAG,"         onRestart");
+        Log.e(TAG, "         onRestart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(TAG,"         onResume");
+        Log.e(TAG, "         onResume");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e(TAG,"         onPause");
+        Log.e(TAG, "         onPause");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.e(TAG,"         onStop");
+        Log.e(TAG, "         onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e(TAG,"         onDestroy");
+        Log.e(TAG, "         onDestroy");
     }
 }

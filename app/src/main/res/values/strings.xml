@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Student scheduler</string>
+    <string name="app_name">Student Scheduler</string>
 
     <!-- Event name for terms  -->
     <string name="event_terms">Terms</string>
@@ -13,14 +13,18 @@
     <!-- Hint for title in editor activity -->
     <string name="title_hint">Title</string>
 
-    <!-- Hint for start time in editor activity -->
-    <string name="start_time_hint">Start time</string>
+    <!-- Hint for start time and date in editor activity -->
+    <string name="time_hint">Time</string>
+    <string name="date_hint">Date</string>
 
-    <!-- Hint for end time in editor activity -->
-    <string name="end_time_hint">End time</string>
+    <string name="start">Start:</string>
+    <string name="end">End:</string>
 
     <!-- Title for the activity to add a new pet [CHAR LIMIT=20] -->
     <string name="title_activity_editor_new_assessment">Add a assessment</string>
+    <string name="title_activity_editor_new_course">Add a course</string>
+    <string name="title_activity_editor_new_term">Add a term</string>
+    <string name="title_activity_editor_new_mentor">Add a mentor</string>
 
     <string name="title_activity_detailed_assessment">Detailed assessment</string>
 
@@ -37,12 +41,16 @@
     <string name="action_menu_redo">Change</string>
 
     <!-- Toast message in editor when new pet has been successfully inserted [CHAR LIMIT=NONE] -->
-    <string name="msg_insert_assessment_successful">Assessment inserted</string>
+    <string name="msg_insert_assessment_successful">Course inserted</string>
+    <string name="msg_insert_course_successful">Course inserted</string>
 
-    <string name="msg_update_assessment_successful">Assessment updated</string>
+    <string name="msg_update_assessment_successful">Course updated</string>
+    <string name="msg_update_course_successful">Course updated</string>
 
     <!-- Toast message in editor when new pet has failed to be inserted [CHAR LIMIT=NONE] -->
     <string name="error_insert_assessment_failed">Error with inserting assessment</string>
+    <string name="error_insert_course_failed">Error with inserting course</string>
+    <string name="error_update_course_failed">Error with inserting course</string>
 
     <string name="error_update_assessment_failed">Error with updating assessment</string>
 
@@ -53,6 +61,9 @@
     <string name="empty_view_subtitle_text_assessment">Get started by adding an assessment</string>
 
     <string name="title_activity_editor_edit_assessment">Edit assessment</string>
+    <string name="title_activity_editor_edit_course">Edit course</string>
+    <string name="title_activity_editor_edit_mentor">Edit mentor</string>
+    <string name="title_activity_editor_edit_term">Edit term</string>
 
     <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
     <string name="msg_unsaved_changes_dialog">Discard your changes and quit editing?</string>
@@ -64,14 +75,14 @@
     <string name="action_keep_editing">Keep Editing</string>
 
     <!-- Toast message in editor when current pet was successfully deleted [CHAR LIMIT=NONE] -->
-    <string name="msg_delete_assessment_successful">Assessment deleted</string>
+    <string name="msg_delete_successful"> deleted</string>
 
     <!-- Toast message in editor when current pet has failed to be deleted [CHAR LIMIT=NONE] -->
-    <string name="error_delete_assessment_failed">Error with deleting assessment</string>
+    <string name="error_delete_failed">Error with deleting</string>
 
-    <string name="tab_course_info">Info</string>
-    <string name="tab_course_assessments">The assessments</string>
-    <string name="tab_course_mentors">Mentors</string>
+    <string name="tab_course_info">Info about course</string>
+    <string name="tab_course_assessments">Assessments of the course</string>
+    <string name="tab_course_mentors">Mentors of the course</string>
 
     <!-- Dialog message to ask the user to confirm deleting the current pet [CHAR LIMIT=NONE] -->
     <string name="msg_delete_assessment_dialog">Delete this assessment?</string>
@@ -85,4 +96,21 @@
 
     <!-- Dialog button text for the option to cancel deletion of the current pet [CHAR LIMIT=20] -->
     <string name="action_dialog_cancel">Cancel</string>
+    <string name="error_delete_assessment_failed">Error with deleting assessment</string>
+    <string name="msg_delete_assessment_successful">Assessment Deleted</string>
+
+    <string name="msg_spinner_courses">For the course:</string>
+    <string name="msg_spinner_terms">For the Term:</string>
+    <string name="msg_spinner_status">Status:</string>
+
+    <!-- Label for dropdown menu option if the pet's gender is unknown [CHAR LIMIT=20] -->
+    <string name="gender_unknown">Unknown</string>
+
+    <string name="status_in_progress">In progress</string>
+    <string name="status_completed">Completed</string>
+    <string name="status_dropped">Dropped</string>
+    <string name="status_plan_to_take">Plan to take</string>
+    <string name="status_unknown">Unknown</string>
+
+    <string name="note">Note</string>
 </resources>

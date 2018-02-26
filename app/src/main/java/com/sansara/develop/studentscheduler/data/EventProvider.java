@@ -28,6 +28,8 @@ public class EventProvider extends ContentProvider {
     private static final int ASSESSMENT_ID = 101;
     private static final int COURSES = 200;
     private static final int COURSE_ID = 201;
+    private static final int TERMS = 300;
+    private static final int TERM_ID = 301;
 
     /**
      * UriMatcher object to match a content URI to a corresponding code.
@@ -45,6 +47,8 @@ public class EventProvider extends ContentProvider {
         sUriMatcher.addURI(EventContract.CONTENT_AUTHORITY, EventContract.PATH_ASSESSMENTS + "/#", ASSESSMENT_ID);
         sUriMatcher.addURI(EventContract.CONTENT_AUTHORITY, EventContract.PATH_COURSES, COURSES);
         sUriMatcher.addURI(EventContract.CONTENT_AUTHORITY, EventContract.PATH_COURSES + "/#", COURSE_ID);
+        sUriMatcher.addURI(EventContract.CONTENT_AUTHORITY, EventContract.PATH_TERMS, TERMS);
+        sUriMatcher.addURI(EventContract.CONTENT_AUTHORITY, EventContract.PATH_TERMS + "/#", TERM_ID);
 
     }
 
@@ -91,6 +95,17 @@ public class EventProvider extends ContentProvider {
                 cursor = database.query(CourseEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
+            case TERMS:
+                cursor = database.query(TermEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
+            case TERM_ID:
+                selection = TermEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+
+                cursor = database.query(TermEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
@@ -105,6 +120,8 @@ public class EventProvider extends ContentProvider {
             case ASSESSMENTS:
                 return insertAssessment(uri, contentValues);
             case COURSES:
+                return insertCourse(uri, contentValues);
+            case TERMS:
                 return insertCourse(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
@@ -128,6 +145,12 @@ public class EventProvider extends ContentProvider {
                 selection = CourseEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateCourse(uri, contentValues, selection, selectionArgs);
+            case TERMS:
+                return updateTerm(uri, contentValues, selection, selectionArgs);
+            case TERM_ID:
+                selection = TermEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return updateTerm(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
@@ -163,6 +186,16 @@ public class EventProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = database.delete(CourseEntry.TABLE_NAME, selection, selectionArgs);
                 break;
+            case TERMS:
+                // Delete all rows that match the selection and selection args
+                rowsDeleted = database.delete(TermEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case TERM_ID:
+                // Delete a single row given by the ID in the URI
+                selection = TermEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsDeleted = database.delete(TermEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
@@ -192,6 +225,10 @@ public class EventProvider extends ContentProvider {
                 return CourseEntry.CONTENT_LIST_TYPE;
             case COURSE_ID:
                 return CourseEntry.CONTENT_ITEM_TYPE;
+            case TERMS:
+                return TermEntry.CONTENT_LIST_TYPE;
+            case TERM_ID:
+                return TermEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
@@ -235,6 +272,31 @@ public class EventProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         long id = database.insert(CourseEntry.TABLE_NAME, null, values);
+        // If the ID is -1, then the insertion failed. Log an error and return null.
+        if (id == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            return null;
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        // Return the new URI with the ID (of the newly inserted row) appended at the end
+        return ContentUris.withAppendedId(uri, id);
+    }
+
+    private Uri insertTerms(Uri uri, ContentValues values) {
+        // Check that fields is not null
+        String title = values.getAsString(TermEntry.COLUMN_TITLE);
+        if (title == null || title.length() == 0) {
+            throw new IllegalArgumentException("Term requires a name");
+        }
+
+        // No need to check the start and end date, any value is valid (including null).
+
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        long id = database.insert(TermEntry.TABLE_NAME, null, values);
         // If the ID is -1, then the insertion failed. Log an error and return null.
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
@@ -298,6 +360,37 @@ public class EventProvider extends ContentProvider {
 
         // Perform the update on the database and get the number of rows affected
         int rowsUpdated = database.update(CourseEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        // If 1 or more rows were updated, then notify all listeners that the data at the
+        // given URI has changed
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        // Return the number of rows updated
+        return rowsUpdated;
+    }
+
+    private int updateTerm(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
+        // If there are no values to update, then don't try to update the database
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        // Check that fields is not null
+        String title = values.getAsString(TermEntry.COLUMN_TITLE);
+        if (title == null || title.length() == 0) {
+            throw new IllegalArgumentException("Term requires a name");
+        }
+
+        // No need to check the start and end date, any value is valid (including null).
+
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Perform the update on the database and get the number of rows affected
+        int rowsUpdated = database.update(TermEntry.TABLE_NAME, values, selection, selectionArgs);
 
         // If 1 or more rows were updated, then notify all listeners that the data at the
         // given URI has changed

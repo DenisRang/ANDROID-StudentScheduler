@@ -18,9 +18,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.sansara.develop.studentscheduler.data.EventContract;
 import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
 
 import butterknife.BindView;
@@ -33,14 +37,21 @@ public class EditorAssessmentActivity extends AppCompatActivity {
 
     private Uri mCurrentAssessmentUri;
 
-    @BindViews({R.id.edit_assessment_title, R.id.edit_assessment_start_time, R.id.edit_assessment_end_time})
+    @BindViews({R.id.edit_assessment_title, R.id.edit_assessment_start_date, R.id.edit_assessment_start_time,
+            R.id.edit_assessment_end_date, R.id.edit_assessment_end_time})
     EditText[] mEditTexts;
+    @BindView(R.id.spinner_for_courses)
+    Spinner mSpinnerCourses;
+    @BindView(R.id.edit_note)
+    EditText mEditTextNote;
+    private int mCourseId;
 
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
      * the view
      */
-    @OnTouch({R.id.edit_assessment_title, R.id.edit_assessment_start_time, R.id.edit_assessment_end_time})
+    @OnTouch({R.id.edit_assessment_title, R.id.edit_assessment_start_date, R.id.edit_assessment_start_time,
+            R.id.edit_assessment_end_date, R.id.edit_assessment_end_time})
     boolean onChangingAssessment() {
         mAssessmentHasChanged = true;
         return false;
@@ -77,11 +88,12 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                 @Override
                 public void apply(@NonNull EditText editText, int index) {
                     if (dataInEditTexts[index] != null && !TextUtils.isEmpty(dataInEditTexts[index]))
-                        mEditTexts[0].setText(dataInEditTexts[index]);
+                        mEditTexts[index].setText(dataInEditTexts[index]);
                 }
             };
-            ButterKnife.apply(mEditTexts, updateEditTexts);
+            ButterKnife.apply(mEditTexts[0], updateEditTexts);
         }
+        setupSpinnerCourses();
     }
 
     @Override
@@ -151,6 +163,37 @@ public class EditorAssessmentActivity extends AppCompatActivity {
         showUnsavedChangesDialog(discardButtonClickListener);
     }
 
+    private void setupSpinnerCourses() {
+        String[] projection = {
+                EventContract.CourseEntry._ID,
+                EventContract.CourseEntry.COLUMN_TITLE};
+        Cursor cursor = getContentResolver().query(EventContract.CourseEntry.CONTENT_URI, projection, null, null, null);
+
+        if (cursor.getCount() > 0) {
+            String[] from = new String[]{EventContract.CourseEntry.COLUMN_TITLE};
+            // create an array of the display item we want to bind our data to
+            int[] to = new int[]{android.R.id.text1};
+            SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item,
+                    cursor, from, to);
+            mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mSpinnerCourses.setAdapter(mAdapter);
+        }
+
+        mSpinnerCourses.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView parent, View view,
+                                       int pos, long log) {
+
+                Cursor c = (Cursor) parent.getItemAtPosition(pos);
+                mCourseId = c.getInt(c.getColumnIndexOrThrow(EventContract.CourseEntry._ID));
+            }
+
+            public void onNothingSelected(AdapterView arg0) {
+
+            }
+        });
+    }
+
     private void saveAssessment() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
@@ -180,6 +223,7 @@ public class EditorAssessmentActivity extends AppCompatActivity {
         values.put(AssessmentEntry.COLUMN_TITLE, title);
         values.put(AssessmentEntry.COLUMN_START_TIME, start);
         values.put(AssessmentEntry.COLUMN_END_TIME, end);
+        values.put(AssessmentEntry.COLUMN_COURSE_ID, mCourseId);
 
         // Determine if this is a new or existing assessment by checking if mCurrentAssessmentUri is null or not
         if (mCurrentAssessmentUri == null) {

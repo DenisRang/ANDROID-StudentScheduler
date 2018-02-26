@@ -42,7 +42,8 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
     private Uri mCurrentAssessmentUri;
     private String TAG = DetailedAssessmentActivity.class.getSimpleName();
 
-    @BindView(R.id.text_detailed_assessment) TextView mTextView;
+    @BindView(R.id.text_detailed_assessment)
+    TextView mTextView;
     private Bundle mBundleExistingAssessment;
 
     @Override
@@ -50,7 +51,7 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_assessment);
         ButterKnife.bind(this);
-        Log.e(TAG,"         onCreate");
+        Log.e(TAG, "         onCreate");
 
         Intent intent = getIntent();
         mCurrentAssessmentUri = intent.getData();
@@ -122,11 +123,13 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
             int ColumnIndexTitle = cursor.getColumnIndex(AssessmentEntry.COLUMN_TITLE);
             int ColumnIndexStart = cursor.getColumnIndex(AssessmentEntry.COLUMN_START_TIME);
             int ColumnIndexEnd = cursor.getColumnIndex(AssessmentEntry.COLUMN_END_TIME);
+            int ColumnIndexCourseId = cursor.getColumnIndex(AssessmentEntry.COLUMN_COURSE_ID);
 
             // Extract out the value from the Cursor for the given column index
             String title = cursor.getString(ColumnIndexTitle);
             String start = cursor.getString(ColumnIndexStart);
             String end = cursor.getString(ColumnIndexEnd);
+            int courseId = cursor.getInt(ColumnIndexCourseId);
 
             mBundleExistingAssessment.putString(EXISTING_ASSESSMENT_TITLE, title);
             mBundleExistingAssessment.putString(EXISTING_ASSESSMENT_START, start);
@@ -135,7 +138,7 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
             // Update the views on the screen with the values from the database
             mTextView.setText(title + "\n"
                     + start + "\n"
-                    + end);
+                    + end + courseId);
 
         }
     }
@@ -181,39 +184,40 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e(TAG,"         onStart");
+        Log.e(TAG, "         onStart");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.e(TAG,"         onRestart");
+        Log.e(TAG, "         onRestart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(TAG,"         onResume");
+        Log.e(TAG, "         onResume");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e(TAG,"         onPause");
+        Log.e(TAG, "         onPause");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.e(TAG,"         onStop");
+        Log.e(TAG, "         onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e(TAG,"         onDestroy");
+        Log.e(TAG, "         onDestroy");
     }
 }

@@ -52,7 +52,6 @@ public class DetailedCourseFragment extends Fragment implements
 
 
     TextView mTextView;
-    private Bundle mBundleExistingCourse;
 
     public DetailedCourseFragment() {
         // Required empty public constructor
@@ -63,9 +62,7 @@ public class DetailedCourseFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         Log.e(TAG,"         onCreate");
 
-        mContext=getActivity();
-        mCurrentCourseUri = ((DetailedActivity)getActivity()).getContentUri();
-        mBundleExistingCourse = new Bundle();
+
 
     }
 
@@ -77,6 +74,9 @@ public class DetailedCourseFragment extends Fragment implements
         View rootView = inflater.inflate(R.layout.fragment_detailed_course, container, false);
 
         mTextView=(TextView)rootView.findViewById(R.id.text_detailed_course);
+
+        mContext=getActivity();
+        mCurrentCourseUri = ((DetailedActivity)getActivity()).getContentUri();
 
 
         getLoaderManager().initLoader(EXISTING_COURSE_LOADER, null, this);
@@ -127,9 +127,11 @@ public class DetailedCourseFragment extends Fragment implements
             String start = cursor.getString(ColumnIndexStart);
             String end = cursor.getString(ColumnIndexEnd);
 
-            mBundleExistingCourse.putString(EXISTING_COURSE_TITLE, title);
-            mBundleExistingCourse.putString(EXISTING_COURSE_START, start);
-            mBundleExistingCourse.putString(EXISTING_COURSE_END, end);
+            Bundle bundleExistingCourse = new Bundle();
+            bundleExistingCourse.putString(EXISTING_COURSE_TITLE, title);
+            bundleExistingCourse.putString(EXISTING_COURSE_START, start);
+            bundleExistingCourse.putString(EXISTING_COURSE_END, end);
+            ((DetailedActivity)getActivity()).setBundle(bundleExistingCourse);
 
             // Update the views on the screen with the values from the database
 
@@ -141,14 +143,10 @@ public class DetailedCourseFragment extends Fragment implements
         }
     }
 
-    public Bundle getBundleExistingCourse() {
-        return mBundleExistingCourse;
-    }
-
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         // If the loader is invalidated, clear out all the data from the fields.
-//        mTextView.setText("");
+        mTextView.setText("");
     }
 
     @Override
