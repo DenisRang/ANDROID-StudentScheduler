@@ -36,8 +36,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
             android:hint="@string/date_hint"
-            android:inputType="textCapWords" />
+            android:inputType="none" />
 
         <!-- End time field -->
         <EditText
@@ -46,8 +48,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
             android:hint="@string/time_hint"
-            android:inputType="textCapWords" />
+            android:inputType="none" />
 
     </LinearLayout>
 
@@ -69,8 +73,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
             android:hint="@string/date_hint"
-            android:inputType="textCapWords" />
+            android:inputType="none" />
 
         <!-- End time field -->
         <EditText
@@ -79,8 +85,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
             android:hint="@string/time_hint"
-            android:inputType="textCapWords" />
+            android:inputType="none" />
 
     </LinearLayout>
 

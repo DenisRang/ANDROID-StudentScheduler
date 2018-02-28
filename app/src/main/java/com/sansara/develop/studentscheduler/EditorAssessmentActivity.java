@@ -1,6 +1,7 @@
 package com.sansara.develop.studentscheduler;
 
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
@@ -19,29 +20,73 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.sansara.develop.studentscheduler.data.EventContract;
 import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
+import com.sansara.develop.studentscheduler.fragment.DatePickerFragment;
+import com.sansara.develop.studentscheduler.fragment.TimePickerFragment;
+import com.sansara.develop.studentscheduler.utils.DateTimeUtils;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnTouch;
+import butterknife.internal.Utils;
 
 
 public class EditorAssessmentActivity extends AppCompatActivity {
 
-    private Uri mCurrentAssessmentUri;
-
     @BindViews({R.id.edit_assessment_title, R.id.edit_assessment_start_date, R.id.edit_assessment_start_time,
             R.id.edit_assessment_end_date, R.id.edit_assessment_end_time})
     EditText[] mEditTexts;
+
     @BindView(R.id.spinner_for_courses)
     Spinner mSpinnerCourses;
+
+    @OnClick({R.id.edit_assessment_start_date, R.id.edit_assessment_end_date})
+    void onClickDate(final EditText editText) {
+        if (editText.length() == 0) {
+            editText.setText(" ");
+        }
+
+        @SuppressWarnings("ValidFragment") DialogFragment datePickerFragment = new DatePickerFragment() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                Calendar dateCalendar = Calendar.getInstance();
+                dateCalendar.set(year, monthOfYear, dayOfMonth);
+                editText.setText(DateTimeUtils.getDate(dateCalendar.getTimeInMillis()));
+            }
+        };
+        datePickerFragment.show(getFragmentManager(), "DatePickerFragment");
+    }
+
+    @OnClick({R.id.edit_assessment_start_time, R.id.edit_assessment_end_time})
+    void onClickTime(final EditText editText) {
+        if (editText.length() == 0) {
+            editText.setText(" ");
+        }
+
+        @SuppressWarnings("ValidFragment") DialogFragment timePickerFragment = new TimePickerFragment() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                Calendar timeCalendar = Calendar.getInstance();
+                timeCalendar.set(0, 0, 0, hourOfDay, minute);
+                editText.setText(DateTimeUtils.getTime(timeCalendar.getTimeInMillis()));
+            }
+        };
+        timePickerFragment.show(getFragmentManager(), "TimePickerFragment");
+    }
+
+    private Uri mCurrentAssessmentUri;
     private int mCourseId;
 
     /**
