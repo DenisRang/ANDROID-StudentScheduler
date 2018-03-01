@@ -64,6 +64,9 @@
     <string name="error_update_mentor_failed">Error with updating mentor</string>
     <string name="error_update_term_failed">Error with updating term</string>
 
+    <string name="error_enter_title">You should enter a title</string>
+    <string name="error_enter_name">You should enter a name</string>
+
     <!-- Title text for the empty view, which describes the empty dog house image [CHAR LIMIT=50] -->
     <string name="empty_view_title_text">It\'s a bit lonely here...</string>
 

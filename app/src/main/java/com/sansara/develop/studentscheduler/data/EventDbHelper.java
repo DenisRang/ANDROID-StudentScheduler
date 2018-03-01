@@ -31,15 +31,17 @@ public class EventDbHelper extends SQLiteOpenHelper {
         String SQL_CREATE_TERMS_TABLE = "CREATE TABLE " + TermEntry.TABLE_NAME + " ("
                 + TermEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + TermEntry.COLUMN_TITLE + " TEXT NOT NULL, "
-                + TermEntry.COLUMN_START_TIME + " TEXT, "
-                + TermEntry.COLUMN_END_TIME + " TEXT);";
+                + TermEntry.COLUMN_START_TIME + " LONG, "
+                + TermEntry.COLUMN_END_TIME + " LONG, "
+                + TermEntry.COLUMN_TIME_STAMP + " LONG);";
         Log.d(TAG, ">>>  " + SQL_CREATE_TERMS_TABLE);
 
         String SQL_CREATE_COURSES_TABLE = "CREATE TABLE " + CourseEntry.TABLE_NAME + " ("
                 + CourseEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + CourseEntry.COLUMN_TITLE + " TEXT NOT NULL, "
-                + CourseEntry.COLUMN_START_TIME + " TEXT, "
-                + CourseEntry.COLUMN_END_TIME + " TEXT, "
+                + CourseEntry.COLUMN_START_TIME + " LONG, "
+                + CourseEntry.COLUMN_END_TIME + " LONG, "
+                + CourseEntry.COLUMN_TIME_STAMP + " LONG, "
                 + CourseEntry.COLUMN_STATUS + " INTEGER NOT NULL DEFAULT 0, "
                 + CourseEntry.COLUMN_NOTE + " TEXT, "
                 // Course can has no term so "NOT NULL" isn't required(e.g. if it's additional course)
@@ -51,8 +53,9 @@ public class EventDbHelper extends SQLiteOpenHelper {
         String SQL_CREATE_ASSESSMENTS_TABLE = "CREATE TABLE " + AssessmentEntry.TABLE_NAME + " ("
                 + AssessmentEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + AssessmentEntry.COLUMN_TITLE + " TEXT NOT NULL, "
-                + AssessmentEntry.COLUMN_START_TIME + " TEXT, "
-                + AssessmentEntry.COLUMN_END_TIME + " TEXT, "
+                + AssessmentEntry.COLUMN_START_TIME + " LONG, "
+                + AssessmentEntry.COLUMN_END_TIME + " LONG, "
+                + AssessmentEntry.COLUMN_TIME_STAMP + " LONG, "
                 // An assessment necessarily belong to a course so "NOT NULL" is required. But for
                 // ability firstly to fill assessments and then fill courses with assessments it
                 // doesn't use "NOT NULL"

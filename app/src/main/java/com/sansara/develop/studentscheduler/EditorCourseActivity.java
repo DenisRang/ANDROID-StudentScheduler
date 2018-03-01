@@ -246,12 +246,6 @@ public class EditorCourseActivity extends AppCompatActivity {
     private void saveCourse() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
-        ButterKnife.Action getTexts = new ButterKnife.Action<EditText>() {
-            @Override
-            public void apply(@NonNull EditText editText, int index) {
-                editText.getText().toString().trim();
-            }
-        };
         String title = mEditTexts[0].getText().toString().trim();
         String start = mEditTexts[1].getText().toString().trim();
         String end = mEditTexts[2].getText().toString().trim();

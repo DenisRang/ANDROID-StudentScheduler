@@ -24,18 +24,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
+import com.sansara.develop.studentscheduler.utils.DateTimeUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.internal.Utils;
 
 
 public class DetailedAssessmentActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String EXTRA_EXISTING_ASSESSMENT_BUNDLE = "existing_assessment_bundle";
-    public static final String EXISTING_ASSESSMENT_TITLE = "existing_assessment_title";
-    public static final String EXISTING_ASSESSMENT_START = "existing_assessment_start";
-    public static final String EXISTING_ASSESSMENT_END = "existing_assessment_end";
+    public static final String EXTRA_EXISTING_ASSESSMENT_BUNDLE = "EXTRA_EXISTING_ASSESSMENT_BUNDLE";
+    public static final String EXISTING_ASSESSMENT_TITLE = "EXISTING_ASSESSMENT_TITLE";
+    public static final String EXISTING_ASSESSMENT_START = "EXISTING_ASSESSMENT_START";
+    public static final String EXISTING_ASSESSMENT_END = "EXISTING_ASSESSMENT_END";
+    public static final String EXISTING_ASSESSMENT_TIME_STAMP = "EXISTING_ASSESSMENT_TIME_STAMP";
+    public static final String EXISTING_ASSESSMENT_COURSE_ID = "EXISTING_ASSESSMENT_COURSE_ID";
 
     private static final int EXISTING_ASSESSMENT_LOADER = 0;
 
@@ -98,6 +102,7 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
                 AssessmentEntry.COLUMN_TITLE,
                 AssessmentEntry.COLUMN_START_TIME,
                 AssessmentEntry.COLUMN_END_TIME,
+                AssessmentEntry.COLUMN_TIME_STAMP,
                 AssessmentEntry.COLUMN_COURSE_ID};
 
         // This loader will execute the ContentProvider's query method on a background thread
@@ -123,22 +128,26 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
             int ColumnIndexTitle = cursor.getColumnIndex(AssessmentEntry.COLUMN_TITLE);
             int ColumnIndexStart = cursor.getColumnIndex(AssessmentEntry.COLUMN_START_TIME);
             int ColumnIndexEnd = cursor.getColumnIndex(AssessmentEntry.COLUMN_END_TIME);
+            int ColumnIndexTimeStamp = cursor.getColumnIndex(AssessmentEntry.COLUMN_TIME_STAMP);
             int ColumnIndexCourseId = cursor.getColumnIndex(AssessmentEntry.COLUMN_COURSE_ID);
 
             // Extract out the value from the Cursor for the given column index
             String title = cursor.getString(ColumnIndexTitle);
-            String start = cursor.getString(ColumnIndexStart);
-            String end = cursor.getString(ColumnIndexEnd);
+            long start = cursor.getLong(ColumnIndexStart);
+            long end = cursor.getLong(ColumnIndexEnd);
+            long stamp = cursor.getLong(ColumnIndexTimeStamp);
             int courseId = cursor.getInt(ColumnIndexCourseId);
 
             mBundleExistingAssessment.putString(EXISTING_ASSESSMENT_TITLE, title);
-            mBundleExistingAssessment.putString(EXISTING_ASSESSMENT_START, start);
-            mBundleExistingAssessment.putString(EXISTING_ASSESSMENT_END, end);
+            mBundleExistingAssessment.putLong(EXISTING_ASSESSMENT_START, start);
+            mBundleExistingAssessment.putLong(EXISTING_ASSESSMENT_END, end);
+            mBundleExistingAssessment.putLong(EXISTING_ASSESSMENT_TIME_STAMP, stamp);
+            mBundleExistingAssessment.putInt(EXISTING_ASSESSMENT_COURSE_ID, courseId);
 
             // Update the views on the screen with the values from the database
             mTextView.setText(title + "\n"
-                    + start + "\n"
-                    + end + courseId);
+                    + DateTimeUtils.getFullDate(start) + "\n"
+                    + DateTimeUtils.getFullDate(end) );
 
         }
     }

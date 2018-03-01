@@ -27,13 +27,16 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.sansara.develop.studentscheduler.alarm.AlarmHelper;
 import com.sansara.develop.studentscheduler.data.EventContract;
 import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
 import com.sansara.develop.studentscheduler.fragment.DatePickerFragment;
 import com.sansara.develop.studentscheduler.fragment.TimePickerFragment;
 import com.sansara.develop.studentscheduler.utils.DateTimeUtils;
 
+import java.sql.Time;
 import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -64,6 +67,7 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                 Calendar dateCalendar = Calendar.getInstance();
                 dateCalendar.set(year, monthOfYear, dayOfMonth);
                 editText.setText(DateTimeUtils.getDate(dateCalendar.getTimeInMillis()));
+                editText.setContentDescription(String.valueOf(dateCalendar.getTimeInMillis()));
             }
         };
         datePickerFragment.show(getFragmentManager(), "DatePickerFragment");
@@ -81,13 +85,15 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                 Calendar timeCalendar = Calendar.getInstance();
                 timeCalendar.set(0, 0, 0, hourOfDay, minute);
                 editText.setText(DateTimeUtils.getTime(timeCalendar.getTimeInMillis()));
+                editText.setContentDescription(String.valueOf(timeCalendar.getTimeInMillis()));
             }
         };
         timePickerFragment.show(getFragmentManager(), "TimePickerFragment");
     }
 
     private Uri mCurrentAssessmentUri;
-    private int mCourseId;
+    private int mCourseId = -1;
+    private long mTimeStamp = -1;
 
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
@@ -122,9 +128,11 @@ public class EditorAssessmentActivity extends AppCompatActivity {
         Bundle bundle = intent.getBundleExtra(DetailedAssessmentActivity.EXTRA_EXISTING_ASSESSMENT_BUNDLE);
         if (bundle != null && !bundle.isEmpty()) {
             // Extract out the value from the Bundle for the given column index
-            final String[] dataInEditTexts = {bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_TITLE),
-                    bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_START),
-                    bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_END)};
+            final String[] dataInEditTexts = {bundle.getString(DetailedAssessmentActivity.EXISTING_ASSESSMENT_TITLE)
+                    , DateTimeUtils.getDate(bundle.getLong(DetailedAssessmentActivity.EXISTING_ASSESSMENT_START))
+                    , DateTimeUtils.getTime(bundle.getLong(DetailedAssessmentActivity.EXISTING_ASSESSMENT_START))
+                    , DateTimeUtils.getDate(bundle.getLong(DetailedAssessmentActivity.EXISTING_ASSESSMENT_END))
+                    , DateTimeUtils.getTime(bundle.getLong(DetailedAssessmentActivity.EXISTING_ASSESSMENT_END))};
 
             // Update the views on the screen with the values from the database
             ButterKnife.Action updateEditTexts = new ButterKnife.Action<EditText>() {
@@ -134,9 +142,17 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                         mEditTexts[index].setText(dataInEditTexts[index]);
                 }
             };
-            ButterKnife.apply(mEditTexts[0], updateEditTexts);
+            ButterKnife.apply(mEditTexts, updateEditTexts);
+
+            mTimeStamp = bundle.getLong(DetailedAssessmentActivity.EXISTING_ASSESSMENT_TIME_STAMP);
+            mCourseId = bundle.getInt(DetailedAssessmentActivity.EXISTING_ASSESSMENT_COURSE_ID);
         }
+
         setupSpinnerCourses();
+        if (mCourseId != -1)
+            for (int i = 0; i < mSpinnerCourses.getCount(); i++)
+                if (mSpinnerCourses.getItemIdAtPosition(i) == mCourseId)
+                    mSpinnerCourses.setSelection(i);
     }
 
     @Override
@@ -238,27 +254,35 @@ public class EditorAssessmentActivity extends AppCompatActivity {
     }
 
     private void saveAssessment() {
+
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
-        ButterKnife.Action getTexts = new ButterKnife.Action<EditText>() {
-            @Override
-            public void apply(@NonNull EditText editText, int index) {
-                editText.getText().toString().trim();
-            }
-        };
         String title = mEditTexts[0].getText().toString().trim();
-        String start = mEditTexts[1].getText().toString().trim();
-        String end = mEditTexts[2].getText().toString().trim();
-
-        // Check if this is supposed to be a new pet
-        // and check if all the fields in the editor are blank
-        if (mCurrentAssessmentUri == null &&
-                TextUtils.isEmpty(title) && TextUtils.isEmpty(start) &&
-                TextUtils.isEmpty(end)) {
-            // Since no fields were modified, we can return early without creating a new assessment.
-            // No need to create ContentValues and no need to do any ContentProvider operations.
+        if (TextUtils.isEmpty(title)) {
+            Toast.makeText(this, R.string.error_enter_title, Toast.LENGTH_SHORT).show();
             return;
         }
+
+        Long start = null;
+        if (mEditTexts[1].getContentDescription() != null && mEditTexts[2].getContentDescription() != null) {
+            Date startDate = new Date(Long.valueOf(mEditTexts[1].getContentDescription().toString()));
+            Time startTime = new Time(Long.valueOf(mEditTexts[2].getContentDescription().toString()));
+            Calendar calendarStart = Calendar.getInstance();
+            calendarStart.set(startDate.getYear(), startDate.getMonth(), startDate.getDate()
+                    , startTime.getHours(), startTime.getMinutes());
+            start = calendarStart.getTimeInMillis();
+        }
+
+        Long end = null;
+        if (mEditTexts[3].getContentDescription() != null && mEditTexts[4].getContentDescription() != null) {
+            Date endDate = new Date(Long.valueOf(mEditTexts[3].getContentDescription().toString()));
+            Time endTime = new Time(Long.valueOf(mEditTexts[4].getContentDescription().toString()));
+            Calendar calendarEnd = Calendar.getInstance();
+            calendarEnd.set(endDate.getYear(), endDate.getMonth(), endDate.getDate()
+                    , endTime.getHours(), endTime.getMinutes());
+            end = calendarEnd.getTimeInMillis();
+        }
+        if (mTimeStamp == -1) mTimeStamp = new Date().getTime();
 
         // Create a ContentValues object where column names are the keys,
         // and assessment attributes from the editor are the values.
@@ -266,7 +290,8 @@ public class EditorAssessmentActivity extends AppCompatActivity {
         values.put(AssessmentEntry.COLUMN_TITLE, title);
         values.put(AssessmentEntry.COLUMN_START_TIME, start);
         values.put(AssessmentEntry.COLUMN_END_TIME, end);
-        values.put(AssessmentEntry.COLUMN_COURSE_ID, mCourseId);
+        values.put(AssessmentEntry.COLUMN_TIME_STAMP, mTimeStamp);
+        if (mCourseId != -1) values.put(AssessmentEntry.COLUMN_COURSE_ID, mCourseId);
 
         // Determine if this is a new or existing assessment by checking if mCurrentAssessmentUri is null or not
         if (mCurrentAssessmentUri == null) {
@@ -283,6 +308,9 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                 // Otherwise, the insertion was successful and we can display a toast.
                 Toast.makeText(this, getString(R.string.msg_insert_assessment_successful),
                         Toast.LENGTH_SHORT).show();
+                if (end != null) {
+                    AlarmHelper.getInstance().setAlarm(title, mTimeStamp, end);
+                }
             }
         } else {
             // Otherwise this is an EXISTING assessment, so update the assessment with content URI: mCurrentAssessmentUri
@@ -300,6 +328,10 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                 // Otherwise, the update was successful and we can display a toast.
                 Toast.makeText(this, getString(R.string.msg_update_assessment_successful),
                         Toast.LENGTH_SHORT).show();
+                if (end != null) {
+                    AlarmHelper.getInstance().removeAlarm(mTimeStamp);
+                    AlarmHelper.getInstance().setAlarm(title, mTimeStamp, end);
+                }
             }
         }
     }

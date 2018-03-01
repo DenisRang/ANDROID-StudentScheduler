@@ -62,6 +62,7 @@ public final class EventContract {
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_START_TIME = "start";
         public static final String COLUMN_END_TIME = "end";
+        public static final String COLUMN_TIME_STAMP = "stamp";
     }
 
     /**
@@ -93,6 +94,7 @@ public final class EventContract {
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_START_TIME = "start";
         public static final String COLUMN_END_TIME = "end";
+        public static final String COLUMN_TIME_STAMP = "stamp";
         public static final String COLUMN_STATUS = "status";
         public static final String COLUMN_NOTE = "note";
         // Term which contains this course
@@ -148,8 +150,10 @@ public final class EventContract {
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_START_TIME = "start";
         public static final String COLUMN_END_TIME = "end";
+        public static final String COLUMN_TIME_STAMP = "stamp";
         // Course for the assessment
         public static final String COLUMN_COURSE_ID = "course_id";
+
     }
 
     /**
