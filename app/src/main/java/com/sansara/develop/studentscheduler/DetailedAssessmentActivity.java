@@ -3,7 +3,6 @@ package com.sansara.develop.studentscheduler;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,24 +10,20 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sansara.develop.studentscheduler.alarm.AlarmHelper;
+import com.sansara.develop.studentscheduler.data.EventContract;
 import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
 import com.sansara.develop.studentscheduler.utils.DateTimeUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.internal.Utils;
 
 
 public class DetailedAssessmentActivity extends AppCompatActivity implements
@@ -46,14 +41,14 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
     private Uri mCurrentAssessmentUri;
     private String TAG = DetailedAssessmentActivity.class.getSimpleName();
 
-    @BindView(R.id.text_detailed_assessment)
+    @BindView(R.id.text_fragment_detailed)
     TextView mTextView;
     private Bundle mBundleExistingAssessment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detailed_assessment);
+        setContentView(R.layout.fragment_detailed);
         ButterKnife.bind(this);
         Log.e(TAG, "         onCreate");
 
@@ -144,10 +139,25 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
             mBundleExistingAssessment.putLong(EXISTING_ASSESSMENT_TIME_STAMP, stamp);
             mBundleExistingAssessment.putInt(EXISTING_ASSESSMENT_COURSE_ID, courseId);
 
-            // Update the views on the screen with the values from the database
-            mTextView.setText(title + "\n"
-                    + DateTimeUtils.getFullDate(start) + "\n"
-                    + DateTimeUtils.getFullDate(end) );
+            String[] projection = {
+                    EventContract.CourseEntry._ID,
+                    EventContract.CourseEntry.COLUMN_TITLE};
+            Cursor cursorForCourse = getContentResolver()
+                    .query(ContentUris.withAppendedId(EventContract.CourseEntry.CONTENT_URI, courseId), projection, null, null, null);
+            cursorForCourse.moveToFirst();
+            int columnIndexCourseTitle = cursorForCourse.getColumnIndex(EventContract.CourseEntry.COLUMN_TITLE);
+            String course;
+            try {
+                course = cursorForCourse.getString(columnIndexCourseTitle);
+            } catch (Exception e) {
+                course = getString(R.string.not_assigned);
+            }
+            cursorForCourse.close();
+
+            mTextView.setText(getString(R.string.title_hint) + ":   " + title + "\n"
+                    + getString(R.string.start) + "   " + DateTimeUtils.getFullDate(start) + "\n"
+                    + getString(R.string.end) + "   " + DateTimeUtils.getFullDate(end) + "\n"
+                    + getString(R.string.msg_spinner_courses) + "   " + course);
 
         }
     }
@@ -165,6 +175,7 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
                 Toast.makeText(this, R.string.error_delete_assessment_failed, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, R.string.msg_delete_assessment_successful, Toast.LENGTH_SHORT).show();
+                AlarmHelper.getInstance().removeAlarm(mBundleExistingAssessment.getLong(EXISTING_ASSESSMENT_TIME_STAMP));
             }
         }
     }

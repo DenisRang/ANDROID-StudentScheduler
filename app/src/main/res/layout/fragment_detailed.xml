@@ -7,7 +7,7 @@
     android:background="@color/fon">
 
     <TextView
-        android:id="@+id/text_detailed_assessment"
+        android:id="@+id/text_fragment_detailed"
         style="@style/ListActivityItemStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

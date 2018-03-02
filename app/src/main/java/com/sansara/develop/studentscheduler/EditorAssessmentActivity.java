@@ -51,7 +51,6 @@ public class EditorAssessmentActivity extends AppCompatActivity {
     @BindViews({R.id.edit_assessment_title, R.id.edit_assessment_start_date, R.id.edit_assessment_start_time,
             R.id.edit_assessment_end_date, R.id.edit_assessment_end_time})
     EditText[] mEditTexts;
-
     @BindView(R.id.spinner_for_courses)
     Spinner mSpinnerCourses;
 
@@ -91,10 +90,6 @@ public class EditorAssessmentActivity extends AppCompatActivity {
         timePickerFragment.show(getFragmentManager(), "TimePickerFragment");
     }
 
-    private Uri mCurrentAssessmentUri;
-    private int mCourseId = -1;
-    private long mTimeStamp = -1;
-
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
      * the view
@@ -106,6 +101,9 @@ public class EditorAssessmentActivity extends AppCompatActivity {
         return false;
     }
 
+    private Uri mCurrentAssessmentUri;
+    private int mCourseId = -1;
+    private long mTimeStamp = -1;
     private boolean mAssessmentHasChanged = false;
 
     @Override
@@ -168,8 +166,6 @@ public class EditorAssessmentActivity extends AppCompatActivity {
             // Respond to a click on the "Save" menu option
             case R.id.item_action_save:
                 saveAssessment();
-                // Exit activity
-                finish();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
@@ -334,6 +330,9 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                 }
             }
         }
+
+        // Exit activity
+        finish();
     }
 
     /**

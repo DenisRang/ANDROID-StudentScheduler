@@ -37,7 +37,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/date_hint"
-            android:inputType="textCapWords" />
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
+            android:inputType="none" />
 
         <!-- End time field -->
         <EditText
@@ -47,7 +49,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/time_hint"
-            android:inputType="textCapWords" />
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
+            android:inputType="none" />
 
     </LinearLayout>
 
@@ -70,7 +74,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/date_hint"
-            android:inputType="textCapWords" />
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
+            android:inputType="none" />
 
         <!-- End time field -->
         <EditText
@@ -80,7 +86,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/time_hint"
-            android:inputType="textCapWords" />
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
+            android:inputType="none" />
 
     </LinearLayout>
 

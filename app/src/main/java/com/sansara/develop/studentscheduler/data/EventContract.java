@@ -119,6 +119,7 @@ public final class EventContract {
             }
             return false;
         }
+
     }
 
     /**

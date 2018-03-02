@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Student Scheduler</string>
+    <string name="app_name">RashmiRamanScheduleApp</string>
 
     <!-- Event name for terms  -->
     <string name="event_terms">Terms</string>
@@ -138,4 +138,6 @@
     <string name="write">Write</string>
     <string name="email_hint">E-mail</string>
     <string name="email_text">E-mail:</string>
+
+    <string name="not_assigned">Not assigned</string>
 </resources>

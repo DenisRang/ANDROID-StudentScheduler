@@ -1,16 +1,12 @@
 package com.sansara.develop.studentscheduler;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
-import android.support.v13.app.FragmentStatePagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -18,14 +14,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.sansara.develop.studentscheduler.adapter.CourseTabAdapter;
-import com.sansara.develop.studentscheduler.data.EventContract;
-import com.sansara.develop.studentscheduler.fragment.AssessmentsFragment;
-import com.sansara.develop.studentscheduler.fragment.DetailedCourseFragment;
+import com.sansara.develop.studentscheduler.alarm.AlarmHelper;
 import com.sansara.develop.studentscheduler.fragment.MentorsFragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
+import static com.sansara.develop.studentscheduler.fragment.DetailedCourseFragment.EXISTING_COURSE_TIME_STAMP;
 import static com.sansara.develop.studentscheduler.fragment.DetailedCourseFragment.EXTRA_EXISTING_COURSE_BUNDLE;
 
 /**
@@ -35,11 +27,10 @@ public class DetailedActivity extends AppCompatActivity {
     public Uri mContentUri;
 
     private Bundle mBundle;
-    private long mCourseId;
-
-    TabLayout mTabLayout;
-
-    ViewPager mViewPager;
+    private long mItemId;
+    private int mEventId;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
 
 
     @Override
@@ -50,22 +41,23 @@ public class DetailedActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mContentUri = intent.getData();
-        mCourseId = ContentUris.parseId(mContentUri);
+        mItemId = ContentUris.parseId(mContentUri);
+        mEventId = intent.getIntExtra(HomeActivity.EXTRA_EVENT_ID, -1);
 
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout_detailed);
         mViewPager = (ViewPager) findViewById(R.id.pager_detailed);
-        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_course_info));
-        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_course_assessments));
-        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_course_mentors));
 
-        switch (intent.getIntExtra(HomeActivity.EXTRA_EVENT_ID, -1)) {
+        switch (mEventId) {
             case HomeActivity.EVENT_ID_TERM:
                 setTitle(getString(R.string.title_activity_detailed_term));
                 //mFragmentList.setTargetFragment(new TermsFragment(), eventId);
                 break;
             case HomeActivity.EVENT_ID_COURSE:
                 setTitle(getString(R.string.title_activity_detailed_course));
-                CourseTabAdapter adapter = new CourseTabAdapter(getFragmentManager(), 3, mCourseId);
+                mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_course_info));
+                mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_course_assessments));
+                mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_course_mentors));
+                CourseTabAdapter adapter = new CourseTabAdapter(getFragmentManager(), 3, mItemId);
                 mViewPager.setAdapter(adapter);
                 break;
         }
@@ -101,11 +93,21 @@ public class DetailedActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to a click on the "Change" menu option
             case R.id.item_action_redo:
-                Intent intent = new Intent(DetailedActivity.this, EditorCourseActivity.class);
-                intent.putExtra(EXTRA_EXISTING_COURSE_BUNDLE, mBundle);
-                intent.putExtra(MentorsFragment.EXTRA_COURSE_ID,mCourseId);
-                intent.setData(mContentUri);
-                startActivity(intent);
+                Intent intent = null;
+                switch (mEventId) {
+                    case HomeActivity.EVENT_ID_TERM:
+
+                        break;
+                    case HomeActivity.EVENT_ID_COURSE:
+                        intent = new Intent(DetailedActivity.this, EditorCourseActivity.class);
+                        intent.putExtra(EXTRA_EXISTING_COURSE_BUNDLE, mBundle);
+                        intent.putExtra(MentorsFragment.EXTRA_COURSE_ID, mItemId);
+                        break;
+                }
+                if (intent != null) {
+                    intent.setData(mContentUri);
+                    startActivity(intent);
+                }
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.item_action_delete:
@@ -131,6 +133,7 @@ public class DetailedActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.error_delete_failed, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, R.string.msg_delete_successful, Toast.LENGTH_SHORT).show();
+                AlarmHelper.getInstance().removeAlarm(mBundle.getLong(EXISTING_COURSE_TIME_STAMP));
             }
         }
     }
@@ -139,13 +142,21 @@ public class DetailedActivity extends AppCompatActivity {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the positivie and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.msg_delete_course_dialog);
-        builder.setPositiveButton(R.string.action_dialog_delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                deleteCourse();
-                finish();
-            }
-        });
+        switch (mEventId) {
+            case HomeActivity.EVENT_ID_TERM:
+
+                break;
+            case HomeActivity.EVENT_ID_COURSE:
+                builder.setMessage(R.string.msg_delete_course_dialog);
+                builder.setPositiveButton(R.string.action_dialog_delete, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        deleteCourse();
+                        finish();
+                    }
+                });
+                break;
+        }
+
         builder.setNegativeButton(R.string.action_dialog_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Cancel" button, so dismiss the dialog

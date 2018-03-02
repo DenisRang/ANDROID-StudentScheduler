@@ -35,7 +35,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 ,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder=new NotificationCompat.Builder(context);
-        builder.setContentTitle("SShedul");
+        builder.setContentTitle(context.getString(R.string.app_name));
         builder.setContentText(title);
         builder.setSmallIcon(R.mipmap.ic_launcher);
 

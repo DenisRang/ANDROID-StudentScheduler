@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.sansara.develop.studentscheduler.alarm.AlarmHelper;
 import com.sansara.develop.studentscheduler.data.EventContract;
 import com.sansara.develop.studentscheduler.fragment.AssessmentsFragment;
 import com.sansara.develop.studentscheduler.fragment.CoursesFragment;
@@ -123,13 +125,27 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void deleteAllItems() {
+        String[] projection = {
+                EventContract.AssessmentEntry._ID,
+                EventContract.AssessmentEntry.COLUMN_TIME_STAMP};
+        Cursor cursor = this.getContentResolver().query(mContentUri, projection, null, null, null);
+
         int rowAffected = getContentResolver().delete(mContentUri, null, null);
-        if (rowAffected == 0) {
+
+        if (rowAffected == 0 || cursor.getCount() != rowAffected) {
             Toast.makeText(this, getString(R.string.error_delete_failed) + " " + getTitle(), Toast.LENGTH_SHORT).show();
         } else {
+            if (cursor.getCount() == rowAffected) {
+                while (cursor.moveToNext()) {
+                    int ColumnIndexTimeStamp = cursor.getColumnIndex(EventContract.AssessmentEntry.COLUMN_TIME_STAMP);
+                    long timeStamp = cursor.getLong(ColumnIndexTimeStamp);
+                    AlarmHelper.getInstance().removeAlarm(timeStamp);
+                }
+            }
             hideOption(R.id.item_delete_all_entries);
             Toast.makeText(this, getTitle() + " " + getString(R.string.msg_delete_successful), Toast.LENGTH_SHORT).show();
         }
+        cursor.close();
     }
 
     @Override
