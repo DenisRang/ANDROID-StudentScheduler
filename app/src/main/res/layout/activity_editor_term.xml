@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Layout for the editor -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fon"
+    android:orientation="vertical"
+    android:padding="16dp"
+>
+
+    <!-- Title field -->
+    <EditText
+        android:id="@+id/edit_term_title"
+        style="@style/EditorFieldStyle"
+        android:hint="@string/title_hint"
+        android:inputType="textCapWords" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Start time field -->
+        <EditText
+            android:id="@+id/edit_term_start_date"
+            style="@style/EditorFieldStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/date_hint"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
+            android:inputType="none" />
+
+        <!-- End time field -->
+        <EditText
+            android:id="@+id/edit_term_start_time"
+            style="@style/EditorFieldStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/time_hint"
+            android:inputType="none" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/end" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Start time field -->
+        <EditText
+            android:id="@+id/edit_term_end_date"
+            style="@style/EditorFieldStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/date_hint"
+            android:inputType="none" />
+
+        <!-- End time field -->
+        <EditText
+            android:id="@+id/edit_term_end_time"
+            style="@style/EditorFieldStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:cursorVisible="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/time_hint"
+            android:inputType="none" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

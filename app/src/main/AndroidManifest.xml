@@ -71,6 +71,14 @@
                 android:value=".ListActivity" />
         </activity>
 
+        <activity
+            android:name=".EditorTermActivity"
+            android:theme="@style/EditorActivityTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ListActivity" />
+        </activity>
+
         <provider
             android:name=".data.EventProvider"
             android:authorities="com.sansara.develop.studentscheduler"

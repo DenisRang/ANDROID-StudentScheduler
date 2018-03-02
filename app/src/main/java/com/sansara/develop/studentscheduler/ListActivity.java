@@ -18,6 +18,7 @@ import com.sansara.develop.studentscheduler.alarm.AlarmHelper;
 import com.sansara.develop.studentscheduler.data.EventContract;
 import com.sansara.develop.studentscheduler.fragment.AssessmentsFragment;
 import com.sansara.develop.studentscheduler.fragment.CoursesFragment;
+import com.sansara.develop.studentscheduler.fragment.TermsFragment;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -51,8 +52,8 @@ public class ListActivity extends AppCompatActivity {
             case HomeActivity.EVENT_ID_TERM:
                 setTitle(getString(R.string.event_terms));
                 mContentUri = EventContract.TermEntry.CONTENT_URI;
-                //mEditorClass=
-                //mFragmentList.setTargetFragment(new TermsFragment(), eventId);
+                mEditorClass = EditorTermActivity.class;
+                ft.add(R.id.frame_layout_for_list_fragment, new TermsFragment()).commit();
                 break;
             case HomeActivity.EVENT_ID_COURSE:
                 setTitle(getString(R.string.event_courses));

@@ -97,6 +97,9 @@
     <string name="tab_course_assessments">Assessments of the course</string>
     <string name="tab_course_mentors">Mentors of the course</string>
 
+    <string name="tab_term_info">Info about term</string>
+    <string name="tab_term_courses">Courses of the term</string>
+
     <!-- Dialog message to ask the user to confirm deleting the current pet [CHAR LIMIT=NONE] -->
     <string name="msg_delete_assessment_dialog">Delete this assessment?</string>
     <string name="msg_delete_course_dialog">Delete this course?</string>

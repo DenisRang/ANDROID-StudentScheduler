@@ -14,11 +14,13 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.sansara.develop.studentscheduler.adapter.CourseTabAdapter;
+import com.sansara.develop.studentscheduler.adapter.TermTabAdapter;
 import com.sansara.develop.studentscheduler.alarm.AlarmHelper;
 import com.sansara.develop.studentscheduler.fragment.MentorsFragment;
 
 import static com.sansara.develop.studentscheduler.fragment.DetailedCourseFragment.EXISTING_COURSE_TIME_STAMP;
 import static com.sansara.develop.studentscheduler.fragment.DetailedCourseFragment.EXTRA_EXISTING_COURSE_BUNDLE;
+import static com.sansara.develop.studentscheduler.fragment.DetailedTermFragment.EXTRA_EXISTING_TERM_BUNDLE;
 
 /**
  * Displays list of events(terms,courses or assessments) that were entered and stored in the app.
@@ -50,15 +52,18 @@ public class DetailedActivity extends AppCompatActivity {
         switch (mEventId) {
             case HomeActivity.EVENT_ID_TERM:
                 setTitle(getString(R.string.title_activity_detailed_term));
-                //mFragmentList.setTargetFragment(new TermsFragment(), eventId);
+                mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_term_info));
+                mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_term_courses));
+                TermTabAdapter adapterTerm = new TermTabAdapter(getFragmentManager(), 2, mItemId);
+                mViewPager.setAdapter(adapterTerm);
                 break;
             case HomeActivity.EVENT_ID_COURSE:
                 setTitle(getString(R.string.title_activity_detailed_course));
                 mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_course_info));
                 mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_course_assessments));
                 mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_course_mentors));
-                CourseTabAdapter adapter = new CourseTabAdapter(getFragmentManager(), 3, mItemId);
-                mViewPager.setAdapter(adapter);
+                CourseTabAdapter adapterCourse = new CourseTabAdapter(getFragmentManager(), 3, mItemId);
+                mViewPager.setAdapter(adapterCourse);
                 break;
         }
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
@@ -96,12 +101,13 @@ public class DetailedActivity extends AppCompatActivity {
                 Intent intent = null;
                 switch (mEventId) {
                     case HomeActivity.EVENT_ID_TERM:
-
+                        intent = new Intent(DetailedActivity.this, EditorTermActivity.class);
+                        intent.putExtra(EXTRA_EXISTING_TERM_BUNDLE, mBundle);
+                        intent.putExtra(MentorsFragment.EXTRA_COURSE_ID, mItemId);
                         break;
                     case HomeActivity.EVENT_ID_COURSE:
                         intent = new Intent(DetailedActivity.this, EditorCourseActivity.class);
                         intent.putExtra(EXTRA_EXISTING_COURSE_BUNDLE, mBundle);
-                        intent.putExtra(MentorsFragment.EXTRA_COURSE_ID, mItemId);
                         break;
                 }
                 if (intent != null) {
@@ -126,7 +132,7 @@ public class DetailedActivity extends AppCompatActivity {
     }
 
 
-    private void deleteCourse() {
+    private void deleteEvent() {
         if (mContentUri != null) {
             int rowAffected = getContentResolver().delete(mContentUri, null, null);
             if (rowAffected == 0) {
@@ -142,20 +148,14 @@ public class DetailedActivity extends AppCompatActivity {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the positivie and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        switch (mEventId) {
-            case HomeActivity.EVENT_ID_TERM:
 
-                break;
-            case HomeActivity.EVENT_ID_COURSE:
-                builder.setMessage(R.string.msg_delete_course_dialog);
-                builder.setPositiveButton(R.string.action_dialog_delete, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        deleteCourse();
-                        finish();
-                    }
-                });
-                break;
-        }
+        builder.setMessage(R.string.msg_delete_term_dialog);
+        builder.setPositiveButton(R.string.action_dialog_delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteEvent();
+                finish();
+            }
+        });
 
         builder.setNegativeButton(R.string.action_dialog_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {

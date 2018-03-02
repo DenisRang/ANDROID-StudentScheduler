@@ -19,15 +19,13 @@ import android.widget.Spinner;
 import com.sansara.develop.studentscheduler.DetailedActivity;
 import com.sansara.develop.studentscheduler.EditorCourseActivity;
 import com.sansara.develop.studentscheduler.HomeActivity;
-import com.sansara.develop.studentscheduler.adapter.CourseTabAdapter;
 import com.sansara.develop.studentscheduler.adapter.ListCursorAdapter;
 import com.sansara.develop.studentscheduler.DetailedAssessmentActivity;
 import com.sansara.develop.studentscheduler.EditorAssessmentActivity;
 import com.sansara.develop.studentscheduler.ListActivity;
 import com.sansara.develop.studentscheduler.R;
-import com.sansara.develop.studentscheduler.adapter.TermTabAdapter;
 import com.sansara.develop.studentscheduler.data.EventContract.CourseEntry;
-import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
+import com.sansara.develop.studentscheduler.data.EventContract.TermEntry;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -37,22 +35,22 @@ import butterknife.Unbinder;
 /**
  * Displays list of events(terms,courses or assessments) that were entered and stored in the app.
  */
-public class CoursesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    private static final int COURSES_LOADER = 0;
+public class TermsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    private static final int TERMS_LOADER = 0;
     private ListCursorAdapter mListCursorAdapter;
     private Context mContext;
     private Unbinder mUnbinder;
 
     @OnItemClick(R.id.list_fragment_list)
-    void onDetailingCourses(long id) {
-        Uri currentUri = ContentUris.withAppendedId(CourseEntry.CONTENT_URI, id);
+    void onDetailingTerms(long id) {
+        Uri currentUri = ContentUris.withAppendedId(TermEntry.CONTENT_URI, id);
         Intent intent = new Intent(mContext, DetailedActivity.class);
-        intent.putExtra(HomeActivity.EXTRA_EVENT_ID, HomeActivity.EVENT_ID_COURSE);
+        intent.putExtra(HomeActivity.EXTRA_EVENT_ID, HomeActivity.EVENT_ID_TERM);
         intent.setData(currentUri);
         startActivity(intent);
     }
 
-    public CoursesFragment() {
+    public TermsFragment() {
         // Required empty public constructor
     }
 
@@ -64,16 +62,16 @@ public class CoursesFragment extends Fragment implements LoaderManager.LoaderCal
 
         mContext = getActivity();
 
-        ListView coursesListView = rootView.findViewById(R.id.list_fragment_list);
+        ListView termsListView = rootView.findViewById(R.id.list_fragment_list);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = rootView.findViewById(R.id.relative_layout_empty_view);
-        coursesListView.setEmptyView(emptyView);
+        termsListView.setEmptyView(emptyView);
 
         mListCursorAdapter = new ListCursorAdapter(mContext, null);
-        coursesListView.setAdapter(mListCursorAdapter);
+        termsListView.setAdapter(mListCursorAdapter);
 
-        getLoaderManager().initLoader(COURSES_LOADER, null, this);
+        getLoaderManager().initLoader(TERMS_LOADER, null, this);
 
         return rootView;
     }
@@ -87,21 +85,16 @@ public class CoursesFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public Loader onCreateLoader(int i, Bundle bundle) {
         String[] projection = {
-                CourseEntry._ID,
-                CourseEntry.COLUMN_TITLE,
-        CourseEntry.COLUMN_TERM_ID};
-        String selection = null;
-        String[] selectionArgs = null;
-        if (getArguments() != null) {
-            selection = CourseEntry.COLUMN_TERM_ID + "=?";
-            selectionArgs = new String[]{String.valueOf(getArguments().getLong(TermTabAdapter.TERM_ID))};
-        }
+                TermEntry._ID,
+                TermEntry.COLUMN_TITLE,
+                TermEntry.COLUMN_START_TIME,
+                TermEntry.COLUMN_END_TIME};
         return new CursorLoader(
                 mContext,
-                CourseEntry.CONTENT_URI,
+                TermEntry.CONTENT_URI,
                 projection,
-                selection,
-                selectionArgs,
+                null,
+                null,
                 null);
     }
 
