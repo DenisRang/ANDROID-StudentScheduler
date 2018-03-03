@@ -10,15 +10,15 @@ public class MyApplication extends Application {
 
     private static boolean mActivatyVisible;
 
-    public static boolean isActivityVisible(){
+    public static boolean isActivityVisible() {
         return mActivatyVisible;
     }
 
-    public static void activityResumed(){
+    public static void activityResumed() {
         mActivatyVisible = true;
     }
 
-    public static void activityPaused(){
+    public static void activityPaused() {
         mActivatyVisible = false;
     }
 }

@@ -281,7 +281,7 @@ public class EditorTermActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the update was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.msg_update_assessment_successful),
+                Toast.makeText(this, getString(R.string.msg_update_term_successful),
                         Toast.LENGTH_SHORT).show();
                 if (end != null) {
                     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);

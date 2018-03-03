@@ -50,7 +50,6 @@ public class DetailedAssessmentActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_detailed);
         ButterKnife.bind(this);
-        Log.e(TAG, "         onCreate");
 
         Intent intent = getIntent();
         mCurrentAssessmentUri = intent.getData();

@@ -12,7 +12,7 @@ import java.util.Calendar;
  * Created by den on 28.02.2018.
  */
 
-public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     public static DatePickerFragment newInstance(int title) {
         DatePickerFragment frag = new DatePickerFragment();
@@ -25,12 +25,12 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Calendar c=Calendar.getInstance();
-        int year=c.get(Calendar.YEAR);
-        int month=c.get(Calendar.MONTH);
-        int day=c.get(Calendar.DAY_OF_MONTH);
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
 
-        return new DatePickerDialog(getActivity(),this,year,month,day);
+        return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
     @Override

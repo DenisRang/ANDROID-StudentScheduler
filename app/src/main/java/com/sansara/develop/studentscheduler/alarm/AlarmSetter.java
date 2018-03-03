@@ -28,7 +28,7 @@ public class AlarmSetter extends BroadcastReceiver {
         Cursor cursor = context.getContentResolver().query(EventContract.TermEntry.CONTENT_URI, projection1, null, null, null);
 
         if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()) {
                 int ColumnIndexTitle = cursor.getColumnIndex(EventContract.TermEntry.COLUMN_TITLE);
                 int ColumnIndexEnd = cursor.getColumnIndex(EventContract.TermEntry.COLUMN_END_TIME);
                 int ColumnIndexTimeStamp = cursor.getColumnIndex(EventContract.TermEntry.COLUMN_TIME_STAMP);
@@ -38,7 +38,7 @@ public class AlarmSetter extends BroadcastReceiver {
                 long end = cursor.getLong(ColumnIndexEnd);
                 long timeStamp = cursor.getLong(ColumnIndexTimeStamp);
 
-                alarmHelper.setAlarm(title,timeStamp,end);
+                alarmHelper.setAlarm(title, timeStamp, end);
             }
         }
         cursor.close();
@@ -52,7 +52,7 @@ public class AlarmSetter extends BroadcastReceiver {
         cursor = context.getContentResolver().query(EventContract.CourseEntry.CONTENT_URI, projection2, null, null, null);
 
         if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()) {
                 int ColumnIndexTitle = cursor.getColumnIndex(EventContract.CourseEntry.COLUMN_TITLE);
                 int ColumnIndexEnd = cursor.getColumnIndex(EventContract.CourseEntry.COLUMN_END_TIME);
                 int ColumnIndexTimeStamp = cursor.getColumnIndex(EventContract.CourseEntry.COLUMN_TIME_STAMP);
@@ -62,7 +62,7 @@ public class AlarmSetter extends BroadcastReceiver {
                 long end = cursor.getLong(ColumnIndexEnd);
                 long timeStamp = cursor.getLong(ColumnIndexTimeStamp);
 
-                alarmHelper.setAlarm(title,timeStamp,end);
+                alarmHelper.setAlarm(title, timeStamp, end);
             }
         }
         cursor.close();
@@ -76,7 +76,7 @@ public class AlarmSetter extends BroadcastReceiver {
         cursor = context.getContentResolver().query(EventContract.AssessmentEntry.CONTENT_URI, projection3, null, null, null);
 
         if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()) {
                 int ColumnIndexTitle = cursor.getColumnIndex(EventContract.AssessmentEntry.COLUMN_TITLE);
                 int ColumnIndexEnd = cursor.getColumnIndex(EventContract.AssessmentEntry.COLUMN_END_TIME);
                 int ColumnIndexTimeStamp = cursor.getColumnIndex(EventContract.AssessmentEntry.COLUMN_TIME_STAMP);
@@ -86,7 +86,7 @@ public class AlarmSetter extends BroadcastReceiver {
                 long end = cursor.getLong(ColumnIndexEnd);
                 long timeStamp = cursor.getLong(ColumnIndexTimeStamp);
 
-                alarmHelper.setAlarm(title,timeStamp,end);
+                alarmHelper.setAlarm(title, timeStamp, end);
             }
         }
         cursor.close();

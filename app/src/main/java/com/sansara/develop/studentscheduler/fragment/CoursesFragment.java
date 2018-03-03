@@ -89,7 +89,7 @@ public class CoursesFragment extends Fragment implements LoaderManager.LoaderCal
         String[] projection = {
                 CourseEntry._ID,
                 CourseEntry.COLUMN_TITLE,
-        CourseEntry.COLUMN_TERM_ID};
+                CourseEntry.COLUMN_TERM_ID};
         String selection = null;
         String[] selectionArgs = null;
         if (getArguments() != null) {

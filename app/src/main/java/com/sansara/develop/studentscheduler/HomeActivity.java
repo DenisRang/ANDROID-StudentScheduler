@@ -22,9 +22,9 @@ public class HomeActivity extends AppCompatActivity {
     public static final int EVENT_ID_ASSESSMENT = 2;
 
     @OnClick({R.id.text_activity_home_terms, R.id.text_activity_home_courses, R.id.text_activity_home_assessments})
-    void onTransitionToListActivity(View view){
+    void onTransitionToListActivity(View view) {
         Intent intent = new Intent(HomeActivity.this, ListActivity.class);
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.text_activity_home_terms:
                 intent.putExtra(EXTRA_EVENT_ID, EVENT_ID_TERM);
                 break;

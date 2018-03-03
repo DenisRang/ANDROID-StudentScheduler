@@ -50,14 +50,6 @@ public class DetailedCourseFragment extends Fragment implements
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.e(TAG, "         onCreate");
-
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.e(TAG, "         onCreateView");
@@ -73,12 +65,6 @@ public class DetailedCourseFragment extends Fragment implements
         getLoaderManager().initLoader(EXISTING_COURSE_LOADER, null, this);
 
         return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.e(TAG, "         onDestroyView");
     }
 
     @Override
@@ -189,54 +175,5 @@ public class DetailedCourseFragment extends Fragment implements
     public void onLoaderReset(Loader<Cursor> loader) {
         // If the loader is invalidated, clear out all the data from the fields.
         mTextView.setText("");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.e(TAG, "         onAttach");
-    }
-
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.e(TAG, "         onActivityCreated");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.e(TAG, "         onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e(TAG, "         onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.e(TAG, "         onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.e(TAG, "         onStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.e(TAG, "         onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.e(TAG, "         onDetach");
     }
 }

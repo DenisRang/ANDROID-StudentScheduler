@@ -44,7 +44,6 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
-        Log.e(TAG, "         onCreate");
 
         int eventId = getIntent().getIntExtra(HomeActivity.EXTRA_EVENT_ID, -1);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -149,39 +148,4 @@ public class ListActivity extends AppCompatActivity {
         cursor.close();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.e(TAG, "         onStart");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.e(TAG, "         onRestart");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e(TAG, "         onResume");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.e(TAG, "         onPause");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.e(TAG, "         onStop");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.e(TAG, "         onDestroy");
-    }
 }

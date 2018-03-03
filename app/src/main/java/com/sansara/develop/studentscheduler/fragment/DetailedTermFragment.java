@@ -22,6 +22,8 @@ import com.sansara.develop.studentscheduler.data.EventContract;
 import com.sansara.develop.studentscheduler.data.EventContract.TermEntry;
 import com.sansara.develop.studentscheduler.utils.DateTimeUtils;
 
+import butterknife.Unbinder;
+
 
 public class DetailedTermFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -47,18 +49,10 @@ public class DetailedTermFragment extends Fragment implements
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.e(TAG, "         onCreate");
-
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e(TAG, "         onCreateView");
 
         View rootView = inflater.inflate(R.layout.fragment_detailed, container, false);
 
@@ -73,11 +67,6 @@ public class DetailedTermFragment extends Fragment implements
         return rootView;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.e(TAG, "         onDestroyView");
-    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -140,52 +129,4 @@ public class DetailedTermFragment extends Fragment implements
         mTextView.setText("");
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.e(TAG, "         onAttach");
-    }
-
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.e(TAG, "         onActivityCreated");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.e(TAG, "         onStart");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e(TAG, "         onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.e(TAG, "         onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.e(TAG, "         onStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.e(TAG, "         onDestroy");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.e(TAG, "         onDetach");
-    }
 }

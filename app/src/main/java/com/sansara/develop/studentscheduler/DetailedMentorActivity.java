@@ -58,6 +58,7 @@ public class DetailedMentorActivity extends AppCompatActivity implements
             return;
         }
     }
+
     @OnClick({R.id.button_write})
     void write(View view) {
         Intent emailIntent = new Intent(Intent.ACTION_SEND);

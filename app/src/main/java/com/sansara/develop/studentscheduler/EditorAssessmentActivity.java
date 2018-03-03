@@ -270,7 +270,7 @@ public class EditorAssessmentActivity extends AppCompatActivity {
             Date startDate = new Date(Long.valueOf(mEditTexts[1].getContentDescription().toString()));
             Time startTime = new Time(Long.valueOf(mEditTexts[2].getContentDescription().toString()));
             Calendar calendarStart = Calendar.getInstance();
-            calendarStart.set(startDate.getYear()+1900, startDate.getMonth(), startDate.getDate()
+            calendarStart.set(startDate.getYear() + 1900, startDate.getMonth(), startDate.getDate()
                     , startTime.getHours(), startTime.getMinutes());
             start = calendarStart.getTimeInMillis();
         }
@@ -279,7 +279,7 @@ public class EditorAssessmentActivity extends AppCompatActivity {
             Date endDate = new Date(Long.valueOf(mEditTexts[3].getContentDescription().toString()));
             Time endTime = new Time(Long.valueOf(mEditTexts[4].getContentDescription().toString()));
             Calendar calendarEnd = Calendar.getInstance();
-            calendarEnd.set(endDate.getYear()+1900, endDate.getMonth(), endDate.getDate()
+            calendarEnd.set(endDate.getYear() + 1900, endDate.getMonth(), endDate.getDate()
                     , endTime.getHours(), endTime.getMinutes());
             end = calendarEnd.getTimeInMillis();
         }
@@ -310,10 +310,9 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.msg_insert_assessment_successful),
                         Toast.LENGTH_SHORT).show();
                 if (end != null) {
-                    String dd=DateTimeUtils.getFullDate(end);
                     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-                    boolean bool=sharedPrefs.getBoolean(getString(R.string.settings_assessments_key),true);
-                    if(bool){
+                    boolean bool = sharedPrefs.getBoolean(getString(R.string.settings_assessments_key), true);
+                    if (bool) {
                         AlarmHelper.getInstance().setAlarm(title, mTimeStamp, end);
                     }
                 }
@@ -336,7 +335,7 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                 if (end != null) {
                     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-                    if(sharedPrefs.getBoolean(getString(R.string.settings_assessments_key),true)) {
+                    if (sharedPrefs.getBoolean(getString(R.string.settings_assessments_key), true)) {
                         AlarmHelper.getInstance().removeAlarm(mTimeStamp);
                         AlarmHelper.getInstance().setAlarm(title, mTimeStamp, end);
                     }

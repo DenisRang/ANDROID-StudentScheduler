@@ -22,7 +22,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         String title = intent.getStringExtra(AlarmHelper.EXTRA_TITLE);
-        long timeStamp = intent.getLongExtra(AlarmHelper.EXTRA_TIME_STAMP,-1);
+        long timeStamp = intent.getLongExtra(AlarmHelper.EXTRA_TIME_STAMP, -1);
 
         Intent resultIntent = new Intent(context, HomeActivity.class);
 
@@ -31,10 +31,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent= PendingIntent.getActivity(context,(int)timeStamp
-                ,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, (int) timeStamp
+                , resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder=new NotificationCompat.Builder(context);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle(context.getString(R.string.app_name));
         builder.setContentText(title);
         builder.setSmallIcon(R.mipmap.ic_launcher);
@@ -42,10 +42,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         builder.setDefaults(Notification.DEFAULT_ALL);
         builder.setContentIntent(pendingIntent);
 
-        Notification notification=builder.build();
+        Notification notification = builder.build();
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
-        NotificationManager notificationManager=(NotificationManager) context
+        NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify((int) timeStamp, notification);
 
