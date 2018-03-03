@@ -10,6 +10,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.sansara.develop.studentscheduler.utils.DateTimeInterfase;
+import com.sansara.develop.studentscheduler.utils.DateTimeUtils;
+
 import java.util.Calendar;
 
 /**
@@ -17,10 +20,17 @@ import java.util.Calendar;
  */
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private static final String BUNDLE_IS_START_TIME = "BUNDLE_IS_START_TIME";
 
+    public static TimePickerFragment newInstance(boolean isStartTime) {
+        TimePickerFragment frag = new TimePickerFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(BUNDLE_IS_START_TIME, isStartTime);
+        frag.setArguments(args);
+        return frag;
+    }
+
+    public TimePickerFragment() {
     }
 
     @Override
@@ -34,6 +44,16 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Calendar timeCalendar = Calendar.getInstance();
+        timeCalendar.set(0, 0, 0, hourOfDay, minute);
+
+        EditText editText = null;
+        if (getArguments().getBoolean(BUNDLE_IS_START_TIME))
+            editText = ((DateTimeInterfase) getActivity()).getEditTextStartTime();
+        else editText = ((DateTimeInterfase) getActivity()).getEditTextEndTime();
+
+        editText.setText(DateTimeUtils.getTime(timeCalendar.getTimeInMillis()));
+        editText.setContentDescription(String.valueOf(timeCalendar.getTimeInMillis()));
     }
 
 }

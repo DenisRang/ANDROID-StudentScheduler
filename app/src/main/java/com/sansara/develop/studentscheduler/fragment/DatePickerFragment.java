@@ -5,6 +5,10 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.widget.DatePicker;
+import android.widget.EditText;
+
+import com.sansara.develop.studentscheduler.utils.DateTimeInterfase;
+import com.sansara.develop.studentscheduler.utils.DateTimeUtils;
 
 import java.util.Calendar;
 
@@ -13,15 +17,18 @@ import java.util.Calendar;
  */
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+    private static final String BUNDLE_IS_START_DATE = "BUNDLE_IS_START_DATE";
 
-    public static DatePickerFragment newInstance(int title) {
+    public static DatePickerFragment newInstance(boolean isStartDate) {
         DatePickerFragment frag = new DatePickerFragment();
         Bundle args = new Bundle();
-        args.putInt("title", title);
+        args.putBoolean(BUNDLE_IS_START_DATE, isStartDate);
         frag.setArguments(args);
         return frag;
     }
-    //public DatePickerFragment(){}
+
+    public DatePickerFragment() {
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -35,6 +42,15 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+        Calendar dateCalendar = Calendar.getInstance();
+        dateCalendar.set(year, monthOfYear, dayOfMonth);
 
+        EditText editText = null;
+        if (getArguments().getBoolean(BUNDLE_IS_START_DATE))
+            editText = ((DateTimeInterfase) getActivity()).getEditTextStartDate();
+        else editText = ((DateTimeInterfase) getActivity()).getEditTextEndDate();
+
+        editText.setText(DateTimeUtils.getDate(dateCalendar.getTimeInMillis()));
+        editText.setContentDescription(String.valueOf(dateCalendar.getTimeInMillis()));
     }
 }

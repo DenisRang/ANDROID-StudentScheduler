@@ -34,6 +34,7 @@ import com.sansara.develop.studentscheduler.data.EventContract;
 import com.sansara.develop.studentscheduler.data.EventContract.AssessmentEntry;
 import com.sansara.develop.studentscheduler.fragment.DatePickerFragment;
 import com.sansara.develop.studentscheduler.fragment.TimePickerFragment;
+import com.sansara.develop.studentscheduler.utils.DateTimeInterfase;
 import com.sansara.develop.studentscheduler.utils.DateTimeUtils;
 
 import java.sql.Time;
@@ -50,7 +51,7 @@ import butterknife.OnTouch;
 import butterknife.internal.Utils;
 
 
-public class EditorAssessmentActivity extends AppCompatActivity {
+public class EditorAssessmentActivity extends AppCompatActivity implements DateTimeInterfase {
 
     @BindViews({R.id.edit_assessment_title, R.id.edit_assessment_start_date, R.id.edit_assessment_start_time,
             R.id.edit_assessment_end_date, R.id.edit_assessment_end_time})
@@ -63,17 +64,9 @@ public class EditorAssessmentActivity extends AppCompatActivity {
         if (editText.length() == 0) {
             editText.setText(" ");
         }
-
-        @SuppressWarnings("ValidFragment") DialogFragment datePickerFragment = new DatePickerFragment() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                Calendar dateCalendar = Calendar.getInstance();
-                dateCalendar.set(year, monthOfYear, dayOfMonth);
-
-                editText.setText(DateTimeUtils.getDate(dateCalendar.getTimeInMillis()));
-                editText.setContentDescription(String.valueOf(dateCalendar.getTimeInMillis()));
-            }
-        };
+        boolean isStartDate = false;
+        if (editText == getEditTextStartDate()) isStartDate = true;
+        DialogFragment datePickerFragment = DatePickerFragment.newInstance(isStartDate);
         datePickerFragment.show(getFragmentManager(), "DatePickerFragment");
     }
 
@@ -83,16 +76,9 @@ public class EditorAssessmentActivity extends AppCompatActivity {
             editText.setText(" ");
         }
 
-        @SuppressWarnings("ValidFragment") DialogFragment timePickerFragment = new TimePickerFragment() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                Calendar timeCalendar = Calendar.getInstance();
-                timeCalendar.set(0, 0, 0, hourOfDay, minute);
-                long temp = timeCalendar.get(Calendar.YEAR);
-                editText.setText(DateTimeUtils.getTime(timeCalendar.getTimeInMillis()));
-                editText.setContentDescription(String.valueOf(timeCalendar.getTimeInMillis()));
-            }
-        };
+        boolean isStartTime = false;
+        if (editText == getEditTextStartDate()) isStartTime = true;
+        DialogFragment timePickerFragment = TimePickerFragment.newInstance(isStartTime);
         timePickerFragment.show(getFragmentManager(), "TimePickerFragment");
     }
 
@@ -117,6 +103,8 @@ public class EditorAssessmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor_assessment);
         ButterKnife.bind(this);
+
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
 
         Intent intent = getIntent();
         mCurrentAssessmentUri = intent.getData();
@@ -372,5 +360,25 @@ public class EditorAssessmentActivity extends AppCompatActivity {
         // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    @Override
+    public EditText getEditTextStartDate() {
+        return mEditTexts[1];
+    }
+
+    @Override
+    public EditText getEditTextStartTime() {
+        return mEditTexts[2];
+    }
+
+    @Override
+    public EditText getEditTextEndDate() {
+        return mEditTexts[3];
+    }
+
+    @Override
+    public EditText getEditTextEndTime() {
+        return mEditTexts[4];
     }
 }
