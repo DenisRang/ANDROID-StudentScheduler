@@ -8,9 +8,11 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,8 @@ import com.sansara.develop.studentscheduler.fragment.TimePickerFragment;
 import com.sansara.develop.studentscheduler.utils.DateTimeUtils;
 
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -65,6 +69,7 @@ public class EditorAssessmentActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
                 Calendar dateCalendar = Calendar.getInstance();
                 dateCalendar.set(year, monthOfYear, dayOfMonth);
+
                 editText.setText(DateTimeUtils.getDate(dateCalendar.getTimeInMillis()));
                 editText.setContentDescription(String.valueOf(dateCalendar.getTimeInMillis()));
             }
@@ -83,6 +88,7 @@ public class EditorAssessmentActivity extends AppCompatActivity {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Calendar timeCalendar = Calendar.getInstance();
                 timeCalendar.set(0, 0, 0, hourOfDay, minute);
+                long temp = timeCalendar.get(Calendar.YEAR);
                 editText.setText(DateTimeUtils.getTime(timeCalendar.getTimeInMillis()));
                 editText.setContentDescription(String.valueOf(timeCalendar.getTimeInMillis()));
             }
@@ -264,17 +270,16 @@ public class EditorAssessmentActivity extends AppCompatActivity {
             Date startDate = new Date(Long.valueOf(mEditTexts[1].getContentDescription().toString()));
             Time startTime = new Time(Long.valueOf(mEditTexts[2].getContentDescription().toString()));
             Calendar calendarStart = Calendar.getInstance();
-            calendarStart.set(startDate.getYear(), startDate.getMonth(), startDate.getDate()
+            calendarStart.set(startDate.getYear()+1900, startDate.getMonth(), startDate.getDate()
                     , startTime.getHours(), startTime.getMinutes());
             start = calendarStart.getTimeInMillis();
         }
-
         Long end = null;
         if (mEditTexts[3].getContentDescription() != null && mEditTexts[4].getContentDescription() != null) {
             Date endDate = new Date(Long.valueOf(mEditTexts[3].getContentDescription().toString()));
             Time endTime = new Time(Long.valueOf(mEditTexts[4].getContentDescription().toString()));
             Calendar calendarEnd = Calendar.getInstance();
-            calendarEnd.set(endDate.getYear(), endDate.getMonth(), endDate.getDate()
+            calendarEnd.set(endDate.getYear()+1900, endDate.getMonth(), endDate.getDate()
                     , endTime.getHours(), endTime.getMinutes());
             end = calendarEnd.getTimeInMillis();
         }
@@ -305,7 +310,12 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.msg_insert_assessment_successful),
                         Toast.LENGTH_SHORT).show();
                 if (end != null) {
-                    AlarmHelper.getInstance().setAlarm(title, mTimeStamp, end);
+                    String dd=DateTimeUtils.getFullDate(end);
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+                    boolean bool=sharedPrefs.getBoolean(getString(R.string.settings_assessments_key),true);
+                    if(bool){
+                        AlarmHelper.getInstance().setAlarm(title, mTimeStamp, end);
+                    }
                 }
             }
         } else {
@@ -325,8 +335,11 @@ public class EditorAssessmentActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.msg_update_assessment_successful),
                         Toast.LENGTH_SHORT).show();
                 if (end != null) {
-                    AlarmHelper.getInstance().removeAlarm(mTimeStamp);
-                    AlarmHelper.getInstance().setAlarm(title, mTimeStamp, end);
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+                    if(sharedPrefs.getBoolean(getString(R.string.settings_assessments_key),true)) {
+                        AlarmHelper.getInstance().removeAlarm(mTimeStamp);
+                        AlarmHelper.getInstance().setAlarm(title, mTimeStamp, end);
+                    }
                 }
             }
         }

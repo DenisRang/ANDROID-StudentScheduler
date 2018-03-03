@@ -94,7 +94,7 @@ public class EventProvider extends ContentProvider {
                         null, null, sortOrder);
                 break;
             case COURSE_ID:
-                selection = AssessmentEntry._ID + "=?";
+                selection = CourseEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 cursor = database.query(CourseEntry.TABLE_NAME, projection, selection, selectionArgs,

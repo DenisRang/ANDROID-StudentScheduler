@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/title_notifications">
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/settings_terms_key"
+        android:title="@string/event_terms" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/settings_courses_key"
+        android:title="@string/event_courses" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/settings_assessments_key"
+        android:title="@string/event_assessments" />
+
+</PreferenceScreen>

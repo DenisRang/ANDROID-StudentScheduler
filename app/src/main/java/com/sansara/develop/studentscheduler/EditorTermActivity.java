@@ -8,9 +8,11 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -225,7 +227,7 @@ public class EditorTermActivity extends AppCompatActivity {
             Date startDate = new Date(Long.valueOf(mEditTexts[1].getContentDescription().toString()));
             Time startTime = new Time(Long.valueOf(mEditTexts[2].getContentDescription().toString()));
             Calendar calendarStart = Calendar.getInstance();
-            calendarStart.set(startDate.getYear(), startDate.getMonth(), startDate.getDate()
+            calendarStart.set(startDate.getYear() + 1900, startDate.getMonth(), startDate.getDate()
                     , startTime.getHours(), startTime.getMinutes());
             start = calendarStart.getTimeInMillis();
         }
@@ -235,7 +237,7 @@ public class EditorTermActivity extends AppCompatActivity {
             Date endDate = new Date(Long.valueOf(mEditTexts[3].getContentDescription().toString()));
             Time endTime = new Time(Long.valueOf(mEditTexts[4].getContentDescription().toString()));
             Calendar calendarEnd = Calendar.getInstance();
-            calendarEnd.set(endDate.getYear(), endDate.getMonth(), endDate.getDate()
+            calendarEnd.set(endDate.getYear() + 1900, endDate.getMonth(), endDate.getDate()
                     , endTime.getHours(), endTime.getMinutes());
             end = calendarEnd.getTimeInMillis();
         }
@@ -263,7 +265,10 @@ public class EditorTermActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.msg_insert_term_successful),
                         Toast.LENGTH_SHORT).show();
                 if (end != null) {
-                    AlarmHelper.getInstance().setAlarm(title, mTimeStamp, end);
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+                    if (sharedPrefs.getBoolean(getString(R.string.settings_terms_key), false)) {
+                        AlarmHelper.getInstance().setAlarm(title, mTimeStamp, end);
+                    }
                 }
             }
         } else {
@@ -279,8 +284,11 @@ public class EditorTermActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.msg_update_assessment_successful),
                         Toast.LENGTH_SHORT).show();
                 if (end != null) {
-                    AlarmHelper.getInstance().removeAlarm(mTimeStamp);
-                    AlarmHelper.getInstance().setAlarm(title, mTimeStamp, end);
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+                    if (sharedPrefs.getBoolean(getString(R.string.settings_terms_key), false)) {
+                        AlarmHelper.getInstance().removeAlarm(mTimeStamp);
+                        AlarmHelper.getInstance().setAlarm(title, mTimeStamp, end);
+                    }
                 }
             }
         }

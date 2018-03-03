@@ -1,5 +1,6 @@
 package com.sansara.develop.studentscheduler;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentUris;
@@ -8,9 +9,11 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -30,6 +33,7 @@ import com.sansara.develop.studentscheduler.fragment.MentorsFragment;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class DetailedMentorActivity extends AppCompatActivity implements
@@ -39,14 +43,31 @@ public class DetailedMentorActivity extends AppCompatActivity implements
     public static final String EXISTING_MENTOR_NAME = "existing_mentor_name";
     public static final String EXISTING_MENTOR_PHONE = "existing_mentor_phone";
     public static final String EXISTING_MENTOR_EMAIL = "existing_mentor_email";
-
     private static final int EXISTING_MENTOR_LOADER = 0;
 
-    private Uri mCurrentMentorUri;
-    private String TAG = DetailedMentorActivity.class.getSimpleName();
 
     @BindViews({R.id.text_name, R.id.text_phone, R.id.text_email})
     TextView[] mTextViews;
+
+    @OnClick({R.id.button_call})
+    void call(View view) {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + mTextViews[1].getText().toString()));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            startActivity(intent);
+            return;
+        }
+    }
+    @OnClick({R.id.button_write})
+    void write(View view) {
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{mTextViews[2].getText().toString()});
+        emailIntent.setType("text/plain");
+        startActivity(emailIntent);
+    }
+
+    private Uri mCurrentMentorUri;
+    private String TAG = DetailedMentorActivity.class.getSimpleName();
     private Bundle mBundleExistingMentor;
 
     @Override

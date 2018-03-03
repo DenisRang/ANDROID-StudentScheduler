@@ -76,32 +76,6 @@ public class EditorMentorActivity extends AppCompatActivity {
             setTitle(getString(R.string.title_activity_editor_edit_mentor));
         }
 
-
-        mEditTexts[1].addTextChangedListener(new TextWatcher() {
-            String lastChar = " ";
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int digits = mEditTexts[1].getText().toString().length();
-                if (digits > 1)
-                    lastChar = mEditTexts[1].getText().toString().substring(digits - 1);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int digits = mEditTexts[1].getText().toString().length();
-                if (!lastChar.equals("-")) {
-                    if (digits == 3 || digits == 7) {
-                        mEditTexts[1].append("-");
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         Bundle bundle = intent.getBundleExtra(DetailedMentorActivity.EXTRA_EXISTING_MENTOR_BUNDLE);
         if (bundle != null && !bundle.isEmpty()) {
             // Extract out the value from the Bundle for the given column index
